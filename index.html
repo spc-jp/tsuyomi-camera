@@ -514,8 +514,6 @@
         function changeTheme(themeName) {
             document.body.className = `${themeName} flex flex-col items-center justify-center p-4 sm:p-6 transition-colors duration-300`;
             userSettings.theme = themeName;
-            
-            // UI Text tweaks based on theme - Removed conditional text to keep "Value Mikke" constant
         }
 
         function openSettings() {
@@ -544,24 +542,95 @@
             changeTheme(userSettings.theme);
         }
 
-        /* --- Main Logic --- */
+        /* --- Main Logic with Expanded Mock Data --- */
 
         const mockData = [
+            /* Business Theme Data */
             {
+                theme: 'theme-business',
                 tags: ['#技術継承', '#品質保証', '#MadeInJapan', '#工場風景', '#プロフェッショナル'],
                 copy: "【品質への約束】\n\n見えない場所にこそ、企業の真価は宿る。\n\n創業以来、私たちが守り続けてきたのは\n妥協なき品質管理と、実直なものづくりです。\n\n信頼という価値を、製品に乗せて。"
             },
             {
+                theme: 'theme-business',
+                tags: ['#オフィス移転', '#働き方改革', '#クリエイティブオフィス', '#ミーティング', '#チームワーク'],
+                copy: "【アイデアが生まれる場所】\n\n開放的な空間が、自由な発想を加速する。\n\n新しいオフィスは、単なる作業場ではありません。\n仲間との対話からイノベーションが生まれる、\n創造の拠点です。"
+            },
+            {
+                theme: 'theme-business',
+                tags: ['#建築デザイン', '#施工事例', '#モダンリビング', '#注文住宅', '#こだわりの家'],
+                copy: "【光と影の芸術】\n\n計算された採光が、暮らしに奥行きを与える。\n\n機能美を追求したデザインは、\n住まう人の感性を刺激し、\n日々の生活を豊かに彩ります。"
+            },
+             {
+                theme: 'theme-business',
+                tags: ['#研修風景', '#人材育成', '#リーダーシップ', '#成長企業', '#採用活動'],
+                copy: "【未来を拓く力】\n\n真剣な眼差しの先に、会社の未来がある。\n\n社員一人ひとりの成長が、組織の原動力。\n互いに高め合い、挑戦し続ける風土が\nここにはあります。"
+            },
+
+            /* Casual Theme Data */
+            {
+                theme: 'theme-casual',
                 tags: ['#カフェ巡り', '#リラックス', '#丁寧な暮らし', '#自家焙煎', '#癒やしの時間'],
                 copy: "【ほっと一息】\n\n忙しい毎日に、少しの余白を。\n\nこだわりの一杯と、心地よい空間をご用意して\nあなたのお越しをお待ちしております。\n\n今日という日が、素敵な一日になりますように。"
             },
             {
+                theme: 'theme-casual',
+                tags: ['#ランチプレート', '#野菜たっぷり', '#ヘルシーランチ', '#彩りごはん', '#食欲の秋'],
+                copy: "【心も体も喜ぶランチ】\n\n旬の食材をふんだんに使った、\n彩り豊かなプレートが完成しました！\n\n「美味しい」は元気の源。\n午後からのパワーチャージにいかがですか？"
+            },
+            {
+                theme: 'theme-casual',
+                tags: ['#雑貨屋', '#インテリア小物', '#ギフト', '#ハンドメイド', '#暮らしを楽しむ'],
+                copy: "【お気に入りを見つけて】\n\n何気ない日常を、ちょっと特別にする魔法。\n\n作り手の想いがこもったアイテムたちは、\n見ているだけで心がワクワクします。\n大切な人への贈り物にも。"
+            },
+            {
+                theme: 'theme-casual',
+                tags: ['#スイーツ部', '#ご褒美タイム', '#パフェ', '#甘党', '#幸せの味'],
+                copy: "【至福のひととき】\n\n一口食べれば、思わず笑顔がこぼれる。\n\n甘い香りに包まれて、\n自分へのご褒美タイムを楽しみませんか？\n心まで満たされる、魔法のスイーツです。"
+            },
+
+            /* Travel Theme Data */
+            {
+                theme: 'theme-travel',
                 tags: ['#絶景', '#非日常', '#大人の休日', '#自然が好き', '#リフレッシュ'],
                 copy: "【心洗われる景色】\n\nただ、そこにいるだけで。\n\n風の音、波の音、木々のざわめき。\n五感で感じる自然のアートが、心を解き放ちます。\n\n次の週末は、少し遠くへ出かけませんか？"
             },
             {
+                theme: 'theme-travel',
+                tags: ['#温泉旅行', '#露天風呂', '#湯治', '#癒やしの旅', '#日本旅館'],
+                copy: "【静寂に包まれて】\n\n湯気に霞む景色を眺めながら、\n日々の疲れをゆっくりと溶かす。\n\n何もしない贅沢な時間が、\n明日への活力を養ってくれます。"
+            },
+            {
+                theme: 'theme-travel',
+                tags: ['#古民家カフェ', '#ノスタルジー', '#歴史的建造物', '#レトロ散歩', '#タイムスリップ'],
+                copy: "【時を超える場所】\n\n長い年月を刻んできた柱や梁。\n懐かしさと温もりが同居する空間。\n\nここでは、時計の針もゆっくりと進むようです。\n歴史の息吹を感じる旅へ。"
+            },
+            {
+                theme: 'theme-travel',
+                tags: ['#グランピング', '#焚き火', '#アウトドア', '#星空', '#自然と暮らす'],
+                copy: "【星空の下で】\n\n揺れる炎を見つめながら語り合う夜。\n\n都会の喧騒を離れ、自然のリズムに身を委ねる。\n大切な人と過ごす、忘れられない思い出を。"
+            },
+
+            /* Minimal Theme Data */
+            {
+                theme: 'theme-minimal',
                 tags: ['#シンプルライフ', '#ミニマリズム', '#デザイン', '#建築', '#モノトーン'],
                 copy: "Less is More.\n\n本質だけを残した、究極のシンプル。\n\n余計な装飾を削ぎ落とすことで\n機能美と静寂が際立ちます。\n\n空間に、思考に、自由を。"
+            },
+            {
+                theme: 'theme-minimal',
+                tags: ['#ワークスペース', '#デスク周り', '#整理整頓', '#集中', '#書斎'],
+                copy: "【思考をクリアに】\n\n整えられた環境は、心を整える。\n\nノイズのない空間で向き合う時間は、\nクリエイティビティを最大限に引き出します。\n私の聖域。"
+            },
+            {
+                theme: 'theme-minimal',
+                tags: ['#コンクリート打ちっぱなし', '#陰影', '#光のアート', '#静寂', '#空間デザイン'],
+                copy: "【静寂の美学】\n\n無機質な素材が織りなす、豊かな表情。\n\n差し込む光が刻々と変化し、\n空間にドラマティックな陰影を描き出します。\n静けさの中に感じる、力強さ。"
+            },
+            {
+                theme: 'theme-minimal',
+                tags: ['#モノクロ写真', '#抽象', '#アート', '#視点', '#日常の断片'],
+                copy: "【視点を変える】\n\n世界は、切り取り方で姿を変える。\n\n色彩を捨て去ることで見えてくる\n形、質感、そして本質。\nありふれた日常が、アートになる瞬間。"
             }
         ];
 
@@ -580,15 +649,14 @@
         });
 
         function showResult() {
-            // Theme based mock data selection (Simulated AI)
-            let filteredData = mockData;
-            if (userSettings.theme === 'theme-business') filteredData = [mockData[0]];
-            else if (userSettings.theme === 'theme-casual') filteredData = [mockData[1]];
-            else if (userSettings.theme === 'theme-travel') filteredData = [mockData[2]];
-            else if (userSettings.theme === 'theme-minimal') filteredData = [mockData[3]];
+            // Theme based mock data selection
+            const candidates = mockData.filter(d => d.theme === userSettings.theme);
             
-            // Random fallback if exact match logic fails or for variety
-            const data = filteredData[Math.floor(Math.random() * filteredData.length)];
+            // Fallback to all data if filter misses (though it shouldn't)
+            const source = candidates.length > 0 ? candidates : mockData;
+            
+            // Random selection from candidates
+            const data = source[Math.floor(Math.random() * source.length)];
             
             resultTags.innerText = data.tags.join(' ');
             resultCopy.innerText = data.copy;

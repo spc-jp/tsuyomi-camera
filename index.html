@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>強み発見カメラ - Multi Style</title>
+    <title>価値みっけ - Multi Style</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -215,10 +215,10 @@
             </button>
 
             <div class="relative">
-                <p id="app-subtitle" class="text-[10px] tracking-[0.2em] text-white/80 uppercase mb-2 font-medium">Business Branding Tool</p>
+                <p id="app-subtitle" class="text-[10px] tracking-[0.2em] text-white/80 uppercase mb-2 font-medium">SNS×カメラ</p>
                 <h1 class="text-xl font-head font-bold flex items-center justify-center gap-2 tracking-wide text-white">
                     <i data-lucide="camera" class="w-5 h-5 opacity-90"></i>
-                    強み × SNS
+                    価値みっけ
                 </h1>
             </div>
         </header>
@@ -515,12 +515,7 @@
             document.body.className = `${themeName} flex flex-col items-center justify-center p-4 sm:p-6 transition-colors duration-300`;
             userSettings.theme = themeName;
             
-            // UI Text tweaks based on theme
-            const subtitle = document.getElementById('app-subtitle');
-            if(themeName === 'theme-casual') subtitle.innerText = "Friendly SNS Tool";
-            else if(themeName === 'theme-travel') subtitle.innerText = "Travel & Scene Log";
-            else if(themeName === 'theme-minimal') subtitle.innerText = "Visual Note";
-            else subtitle.innerText = "Business Branding Tool";
+            // UI Text tweaks based on theme - Removed conditional text to keep "Value Mikke" constant
         }
 
         function openSettings() {

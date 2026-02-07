@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>強み発見カメラ - Multi Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* フォント定義 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600&family=Zen+Maru+Gothic:wght@500;700&display=swap');
+        
+        :root {
+            /* デフォルト（フォールバック） */
+            --gradient-main: linear-gradient(135deg, #1F3A5F 0%, #0F172A 100%);
+            --color-sub: #E6E9EF;
+            --color-accent: #4DA3FF;
+            --color-text: #1F3A5F;
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-head: 'Noto Serif JP', serif;
+            --radius-btn: 0.5rem;
+            --radius-card: 1.5rem;
+        }
+
+        /* --- テーマ定義（グラデーション強化） --- */
+
+        /* 1. Business: 知的で深いネイビーのグラデーション */
+        body.theme-business {
+            --gradient-main: linear-gradient(135deg, #1F3A5F 0%, #0F172A 100%);
+            --color-sub: #E6E9EF;
+            --color-accent: #4DA3FF;
+            --color-text: #1F3A5F;
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-head: 'Noto Serif JP', serif;
+            --radius-btn: 0.5rem;
+            --radius-card: 1rem;
+        }
+
+        /* 2. Casual: 温かみのあるオレンジ〜コーラルのグラデーション */
+        body.theme-casual {
+            --gradient-main: linear-gradient(135deg, #EA580C 0%, #DB2777 100%);
+            --color-sub: #FFF7ED;
+            --color-accent: #FDBA74;
+            --color-text: #431407;
+            --font-main: 'Zen Maru Gothic', sans-serif;
+            --font-head: 'Zen Maru Gothic', sans-serif;
+            --radius-btn: 9999px;
+            --radius-card: 2rem;
+        }
+
+        /* 3. Travel: エメラルドグリーンの爽やかなグラデーション */
+        body.theme-travel {
+            --gradient-main: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+            --color-sub: #F0FDFA;
+            --color-accent: #2DD4BF;
+            --color-text: #134E4A;
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-head: 'Noto Sans JP', sans-serif;
+            --radius-btn: 1rem;
+            --radius-card: 1.5rem;
+        }
+
+        /* 4. Minimal: モノトーンの洗練されたグラデーション */
+        body.theme-minimal {
+            --gradient-main: linear-gradient(135deg, #171717 0%, #404040 100%);
+            --color-sub: #FAFAFA;
+            --color-accent: #737373;
+            --color-text: #171717;
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-head: 'Noto Sans JP', sans-serif;
+            --radius-btn: 0px;
+            --radius-card: 0px;
+        }
+
+        body {
+            font-family: var(--font-main);
+            /* 背景にも斜めの微細なグラデーション */
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--color-sub) 100%);
+            color: var(--color-text);
+            touch-action: manipulation;
+            min-height: 100vh;
+            transition: all 0.5s ease;
+        }
+
+        h1, h2, .font-head {
+            font-family: var(--font-head);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .scanning-line {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: scan 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--color-accent);
+        }
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* メインカラーを適用する要素（グラデーション化） */
+        .bg-theme-gradient {
+            background: var(--gradient-main);
+        }
+
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0, 0.15); /* 影を少し強めて浮遊感 */
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-btn);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 15px rgba(0,0,0, 0.2);
+            transform: translateY(-1px);
+        }
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+        /* ボタン内の光沢エフェクト */
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+            pointer-events: none;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            border: 1px solid #CBD5E1;
+            color: var(--color-text);
+            transition: all 0.2s;
+            border-radius: var(--radius-btn);
+        }
+        .btn-secondary:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            background-color: #fff;
+        }
+
+        .icon-wrapper {
+            transition: transform 0.2s;
+            cursor: pointer;
+            border-radius: var(--radius-btn);
+        }
+        .icon-wrapper:active {
+            transform: scale(0.95);
+        }
+
+        .card-biz {
+            background: white;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05); /* ソフトな影 */
+            border-radius: var(--radius-card);
+            backdrop-filter: blur(10px); /* すりガラス風 */
+        }
+
+        .main-container {
+            border-radius: var(--radius-card);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        [contenteditable="true"] {
+            outline: 2px solid var(--color-accent);
+            border-radius: 4px;
+            padding: 4px;
+            background-color: #fff;
+            min-height: 1.5em;
+        }
+
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+        }
+        
+        .color-radio:checked + label {
+            ring-width: 2px;
+            ring-offset-width: 2px;
+            ring-color: var(--color-accent);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="theme-business flex flex-col items-center justify-center p-4 sm:p-6">
+
+    <main class="main-container w-full max-w-[400px] bg-white overflow-hidden min-h-[750px] flex flex-col relative ring-1 ring-black/5">
+        
+        <!-- ヘッダー（グラデーションクラス適用） -->
+        <header class="text-white pt-8 pb-6 px-6 text-center relative z-10 transition-all duration-500 bg-theme-gradient">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+            
+            <!-- 設定ボタン -->
+            <button onclick="openSettings()" class="absolute top-6 right-6 p-2 rounded-full hover:bg-white/20 transition-colors z-20">
+                <i data-lucide="settings" class="w-5 h-5 text-white"></i>
+            </button>
+
+            <div class="relative">
+                <p id="app-subtitle" class="text-[10px] tracking-[0.2em] text-white/80 uppercase mb-2 font-medium">Business Branding Tool</p>
+                <h1 class="text-xl font-head font-bold flex items-center justify-center gap-2 tracking-wide text-white">
+                    <i data-lucide="camera" class="w-5 h-5 opacity-90"></i>
+                    強み × SNS
+                </h1>
+            </div>
+        </header>
+
+        <div id="app-content" class="flex-1 flex flex-col relative" style="background-color: var(--color-sub); transition: background-color 0.5s;">
+            
+            <!-- Home -->
+            <div id="screen-home" class="flex flex-col items-center justify-between h-full p-6 fade-in">
+                <div class="flex-1 flex flex-col items-center justify-center space-y-8 w-full">
+                    <div class="text-center space-y-4 bg-white p-8 rounded-[inherit] shadow-sm border border-slate-100 w-full card-biz">
+                        <!-- アイコン背景もアクセントではなくテーマに馴染む色へ -->
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-2 transition-colors duration-500" style="background: var(--color-sub);">
+                            <i data-lucide="sparkles" class="w-8 h-8" style="color: var(--color-text);"></i>
+                        </div>
+                        <h2 class="text-lg font-bold font-head" style="color: var(--color-text);">
+                            あなたの「価値」を<br>言葉にします。
+                        </h2>
+                        <p class="text-xs opacity-70 leading-relaxed">
+                            写真を撮るだけで、AIが魅力を発見。<br>
+                            SNS投稿文を自動作成します。
+                        </p>
+                    </div>
+
+                    <div class="w-full space-y-3">
+                        <input type="file" id="camera-input" accept="image/*" class="hidden">
+                        <button onclick="document.getElementById('camera-input').click()" 
+                            class="btn-primary w-full text-white py-4 flex items-center justify-center gap-3">
+                            <i data-lucide="aperture" class="w-5 h-5"></i>
+                            <span class="text-base font-bold tracking-wide">写真撮影・解析</span>
+                        </button>
+                        <button onclick="document.getElementById('camera-input').click()" 
+                            class="btn-secondary w-full py-3 text-xs font-bold flex items-center justify-center gap-2">
+                            <i data-lucide="image" class="w-4 h-4"></i>
+                            画像ファイルを選択
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-black/5 w-full">
+                    <p class="text-[10px] text-center opacity-50 mb-3 tracking-wider">SHARE ON</p>
+                    <div class="flex justify-center gap-6 opacity-60">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                        <i data-lucide="facebook" class="w-5 h-5"></i>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        <span class="text-xs font-bold pt-0.5">LINE</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="screen-loading" class="hidden flex flex-col items-center justify-center h-full p-8 gap-8 fade-in">
+                <div class="relative w-full aspect-square max-w-[260px] bg-white overflow-hidden shadow-lg border border-black/5 card-biz">
+                    <img id="preview-image-loading" class="w-full h-full object-cover opacity-80" src="" alt="解析中">
+                    <div class="scanning-line"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-4">
+                        <div class="bg-white/90 backdrop-blur px-4 py-3 rounded-lg text-xs border border-slate-200 shadow-lg" style="color: var(--color-text);">
+                            <div class="flex items-center gap-2 mb-1">
+                                <div class="w-2 h-2 rounded-full animate-pulse" style="background-color: var(--color-accent);"></div>
+                                <span class="font-bold">Analyzing Context...</span>
+                            </div>
+                            <div class="text-[10px] opacity-70 pl-4">
+                                シーンを認識中...<br>
+                                キーワード抽出中...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div id="screen-result" class="hidden flex flex-col h-full fade-in relative" style="background-color: var(--color-sub);">
+                <div class="relative w-full h-48 shrink-0 transition-all duration-500 bg-theme-gradient">
+                    <img id="preview-image-result" class="w-full h-full object-cover mix-blend-overlay opacity-50" src="" alt="解析結果">
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                        <div class="flex items-center gap-2">
+                            <span class="text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm" style="background-color: var(--color-accent);">生成完了</span>
+                            <span class="text-white text-xs font-bold">ドラフト作成済み</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="resetApp()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors z-20 border border-white/20">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 px-5 py-6 overflow-y-auto -mt-6 relative z-10">
+                    
+                    <div class="card-biz p-6 mb-5 relative shadow-lg">
+                        <div class="flex items-center justify-between mb-4 border-b border-black/5 pb-2">
+                            <span class="text-xs font-bold opacity-40">DRAFT CONTENT</span>
+                            
+                            <div class="flex items-center gap-3">
+                                <button id="btn-clear-text" onclick="clearText()" class="hidden text-red-400 text-xs font-bold flex items-center gap-1 hover:text-red-600 transition-colors">
+                                    <i data-lucide="trash-2" class="w-3 h-3"></i> 消去
+                                </button>
+                                <button id="btn-edit-toggle" onclick="toggleEdit()" class="text-xs font-bold flex items-center gap-1 transition-colors" style="color: var(--color-accent);">
+                                    <i data-lucide="edit-2" class="w-3 h-3"></i> 編集
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="result-copy" class="text-sm leading-7 font-medium mb-4 whitespace-pre-line p-2 transition-colors" style="color: var(--color-text);"></div>
+                        
+                        <div class="p-3 rounded-lg border border-black/5 bg-black/5">
+                            <p id="result-tags" class="text-xs font-mono leading-relaxed p-1" style="color: var(--color-text); opacity: 0.8;"></p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button onclick="copyToClipboard()" id="btn-copy" 
+                            class="btn-primary w-full text-white py-3 flex items-center justify-center gap-2 shadow-md">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span class="font-bold text-sm">テキストをコピー</span>
+                        </button>
+
+                        <div class="grid grid-cols-4 gap-2 mt-4">
+                            <button class="icon-wrapper flex flex-col items-center gap-1 bg-white p-2 border border-slate-200 shadow-sm hover:border-blue-400" onclick="openSNS('instagram')">
+                                <i data-lucide="instagram" class="w-5 h-5 text-slate-600"></i>
+                                <span class="text-[9px] text-slate-500 font-bold">Insta</span>
+                            </button>
+                            <button class="icon-wrapper flex flex-col items-center gap-1 bg-white p-2 border border-slate-200 shadow-sm hover:border-blue-600" onclick="openSNS('facebook')">
+                                <i data-lucide="facebook" class="w-5 h-5 text-slate-600"></i>
+                                <span class="text-[9px] text-slate-500 font-bold">FB</span>
+                            </button>
+                            <button class="icon-wrapper flex flex-col items-center gap-1 bg-white p-2 border border-slate-200 shadow-sm hover:border-black" onclick="openSNS('twitter')">
+                                <svg class="w-5 h-5 text-slate-600 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                <span class="text-[9px] text-slate-500 font-bold">X</span>
+                            </button>
+                            <button class="icon-wrapper flex flex-col items-center gap-1 bg-white p-2 border border-slate-200 shadow-sm hover:border-green-500" onclick="openSNS('line')">
+                                <span class="text-xs font-bold text-slate-600">LINE</span>
+                                <span class="text-[9px] text-slate-500 font-bold">LINE</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer area -->
+                <div class="p-4 bg-white/50 backdrop-blur-sm text-center">
+                    <button onclick="resetApp()" class="text-xs font-bold opacity-50 hover:opacity-100 flex items-center justify-center gap-2 transition-all mx-auto">
+                        <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+                        新しい写真を解析
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- コピーライトフッター -->
+        <footer class="w-full bg-slate-50 border-t border-slate-100 py-2 text-center z-10">
+            <p class="text-[10px] text-slate-400 font-medium">
+                テスト版（ベータ版） © 2026 SPC
+            </p>
+        </footer>
+
+        <!-- 設定モーダル -->
+        <div id="settings-modal" class="hidden absolute inset-0 z-50 modal-overlay flex flex-col justify-end sm:justify-center fade-in">
+            <div class="bg-white w-full rounded-t-2xl sm:rounded-2xl sm:w-[90%] sm:mx-auto p-6 shadow-2xl animate-slide-up max-h-[80vh] flex flex-col">
+                
+                <div class="flex items-center justify-between mb-6 shrink-0">
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="palette" class="w-5 h-5 text-slate-500"></i>
+                        スタイル & 設定
+                    </h2>
+                    <button onclick="closeSettings()" class="p-2 -mr-2 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-6 overflow-y-auto pb-4 flex-1">
+                    
+                    <!-- テーマ設定 -->
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">アプリの雰囲気を選ぶ</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Business -->
+                            <div class="relative">
+                                <input type="radio" name="theme" id="theme-business" value="theme-business" class="hidden color-radio" checked onchange="changeTheme(this.value)">
+                                <label for="theme-business" class="block w-full p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer transition-all hover:bg-slate-100">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <!-- グラデーション見本 -->
+                                        <div class="w-4 h-4 rounded-full bg-gradient-to-br from-[#1F3A5F] to-[#0F172A]"></div>
+                                        <span class="text-sm font-bold text-[#1F3A5F]">Business</span>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500">信頼・堅実・プロ<br>士業/法人向け</p>
+                                </label>
+                            </div>
+                            <!-- Casual -->
+                            <div class="relative">
+                                <input type="radio" name="theme" id="theme-casual" value="theme-casual" class="hidden color-radio" onchange="changeTheme(this.value)">
+                                <label for="theme-casual" class="block w-full p-3 rounded-xl bg-orange-50 border border-orange-100 cursor-pointer transition-all hover:bg-orange-100">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-4 h-4 rounded-full bg-gradient-to-br from-[#EA580C] to-[#DB2777]"></div>
+                                        <span class="text-sm font-bold text-[#EA580C]">Casual</span>
+                                    </div>
+                                    <p class="text-[10px] text-orange-800/70">親しみ・元気・ポップ<br>カフェ/サロン向け</p>
+                                </label>
+                            </div>
+                            <!-- Travel -->
+                            <div class="relative">
+                                <input type="radio" name="theme" id="theme-travel" value="theme-travel" class="hidden color-radio" onchange="changeTheme(this.value)">
+                                <label for="theme-travel" class="block w-full p-3 rounded-xl bg-teal-50 border border-teal-100 cursor-pointer transition-all hover:bg-teal-100">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-4 h-4 rounded-full bg-gradient-to-br from-[#0D9488] to-[#0F766E]"></div>
+                                        <span class="text-sm font-bold text-[#0D9488]">Travel</span>
+                                    </div>
+                                    <p class="text-[10px] text-teal-800/70">非日常・癒やし・自然<br>観光/宿泊向け</p>
+                                </label>
+                            </div>
+                            <!-- Minimal -->
+                            <div class="relative">
+                                <input type="radio" name="theme" id="theme-minimal" value="theme-minimal" class="hidden color-radio" onchange="changeTheme(this.value)">
+                                <label for="theme-minimal" class="block w-full p-3 rounded-xl bg-gray-50 border border-gray-200 cursor-pointer transition-all hover:bg-gray-100">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-4 h-4 rounded-full bg-gradient-to-br from-[#171717] to-[#404040]"></div>
+                                        <span class="text-sm font-bold text-[#171717]">Minimal</span>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500">洗練・中立・シンプル<br>デザイン/建築向け</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SNS設定 -->
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">リンク先設定 (任意)</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="instagram" class="w-4 h-4 text-slate-400"></i>
+                                <input id="input-insta" type="url" placeholder="Instagram URL" class="flex-1 text-xs border border-slate-200 rounded-lg p-2 focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="facebook" class="w-4 h-4 text-slate-400"></i>
+                                <input id="input-fb" type="url" placeholder="Facebook URL" class="flex-1 text-xs border border-slate-200 rounded-lg p-2 focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                <input id="input-x" type="url" placeholder="X (Twitter) URL" class="flex-1 text-xs border border-slate-200 rounded-lg p-2 focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold text-slate-400 w-4 text-center">L</span>
+                                <input id="input-line" type="url" placeholder="LINE Official URL" class="flex-1 text-xs border border-slate-200 rounded-lg p-2 focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-slate-100 shrink-0">
+                    <button onclick="saveSettings()" class="btn-primary w-full py-3 rounded-lg text-sm font-bold text-white shadow-lg transition-all transform active:scale-95">
+                        保存して閉じる
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const fileInput = document.getElementById('camera-input');
+        const screenHome = document.getElementById('screen-home');
+        const screenLoading = document.getElementById('screen-loading');
+        const screenResult = document.getElementById('screen-result');
+        const previewLoading = document.getElementById('preview-image-loading');
+        const previewResult = document.getElementById('preview-image-result');
+        const resultTags = document.getElementById('result-tags');
+        const resultCopy = document.getElementById('result-copy');
+        const btnEditToggle = document.getElementById('btn-edit-toggle');
+        const btnClearText = document.getElementById('btn-clear-text');
+        
+        // Settings
+        const settingsModal = document.getElementById('settings-modal');
+        const inputInsta = document.getElementById('input-insta');
+        const inputFb = document.getElementById('input-fb');
+        const inputX = document.getElementById('input-x');
+        const inputLine = document.getElementById('input-line');
+
+        let isEditing = false;
+        
+        // Defaults
+        let userSettings = {
+            theme: 'theme-business',
+            urls: { instagram: '', facebook: '', twitter: '', line: '' }
+        };
+
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('bizCameraSettings_v2'); // v2 for new schema
+            if (saved) {
+                userSettings = JSON.parse(saved);
+                applySettings();
+            }
+        });
+
+        function changeTheme(themeName) {
+            document.body.className = `${themeName} flex flex-col items-center justify-center p-4 sm:p-6 transition-colors duration-300`;
+            userSettings.theme = themeName;
+            
+            // UI Text tweaks based on theme
+            const subtitle = document.getElementById('app-subtitle');
+            if(themeName === 'theme-casual') subtitle.innerText = "Friendly SNS Tool";
+            else if(themeName === 'theme-travel') subtitle.innerText = "Travel & Scene Log";
+            else if(themeName === 'theme-minimal') subtitle.innerText = "Visual Note";
+            else subtitle.innerText = "Business Branding Tool";
+        }
+
+        function openSettings() {
+            inputInsta.value = userSettings.urls.instagram;
+            inputFb.value = userSettings.urls.facebook;
+            inputX.value = userSettings.urls.twitter;
+            inputLine.value = userSettings.urls.line;
+            document.getElementById(userSettings.theme).checked = true;
+            settingsModal.classList.remove('hidden');
+        }
+
+        function closeSettings() {
+            settingsModal.classList.add('hidden');
+        }
+
+        function saveSettings() {
+            userSettings.urls.instagram = inputInsta.value.trim();
+            userSettings.urls.facebook = inputFb.value.trim();
+            userSettings.urls.twitter = inputX.value.trim();
+            userSettings.urls.line = inputLine.value.trim();
+            localStorage.setItem('bizCameraSettings_v2', JSON.stringify(userSettings));
+            closeSettings();
+        }
+
+        function applySettings() {
+            changeTheme(userSettings.theme);
+        }
+
+        /* --- Main Logic --- */
+
+        const mockData = [
+            {
+                tags: ['#技術継承', '#品質保証', '#MadeInJapan', '#工場風景', '#プロフェッショナル'],
+                copy: "【品質への約束】\n\n見えない場所にこそ、企業の真価は宿る。\n\n創業以来、私たちが守り続けてきたのは\n妥協なき品質管理と、実直なものづくりです。\n\n信頼という価値を、製品に乗せて。"
+            },
+            {
+                tags: ['#カフェ巡り', '#リラックス', '#丁寧な暮らし', '#自家焙煎', '#癒やしの時間'],
+                copy: "【ほっと一息】\n\n忙しい毎日に、少しの余白を。\n\nこだわりの一杯と、心地よい空間をご用意して\nあなたのお越しをお待ちしております。\n\n今日という日が、素敵な一日になりますように。"
+            },
+            {
+                tags: ['#絶景', '#非日常', '#大人の休日', '#自然が好き', '#リフレッシュ'],
+                copy: "【心洗われる景色】\n\nただ、そこにいるだけで。\n\n風の音、波の音、木々のざわめき。\n五感で感じる自然のアートが、心を解き放ちます。\n\n次の週末は、少し遠くへ出かけませんか？"
+            },
+            {
+                tags: ['#シンプルライフ', '#ミニマリズム', '#デザイン', '#建築', '#モノトーン'],
+                copy: "Less is More.\n\n本質だけを残した、究極のシンプル。\n\n余計な装飾を削ぎ落とすことで\n機能美と静寂が際立ちます。\n\n空間に、思考に、自由を。"
+            }
+        ];
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewLoading.src = e.target.result;
+                    previewResult.src = e.target.result;
+                    screenHome.classList.add('hidden');
+                    screenLoading.classList.remove('hidden');
+                    setTimeout(() => showResult(), 2000);
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        function showResult() {
+            // Theme based mock data selection (Simulated AI)
+            let filteredData = mockData;
+            if (userSettings.theme === 'theme-business') filteredData = [mockData[0]];
+            else if (userSettings.theme === 'theme-casual') filteredData = [mockData[1]];
+            else if (userSettings.theme === 'theme-travel') filteredData = [mockData[2]];
+            else if (userSettings.theme === 'theme-minimal') filteredData = [mockData[3]];
+            
+            // Random fallback if exact match logic fails or for variety
+            const data = filteredData[Math.floor(Math.random() * filteredData.length)];
+            
+            resultTags.innerText = data.tags.join(' ');
+            resultCopy.innerText = data.copy;
+            disableEdit();
+            screenLoading.classList.add('hidden');
+            screenResult.classList.remove('hidden');
+        }
+
+        function resetApp() {
+            fileInput.value = '';
+            screenResult.classList.add('hidden');
+            screenHome.classList.remove('hidden');
+            disableEdit();
+        }
+
+        function toggleEdit() {
+            isEditing = !isEditing;
+            if (isEditing) enableEdit(); else disableEdit();
+        }
+
+        function enableEdit() {
+            resultCopy.contentEditable = "true";
+            resultTags.contentEditable = "true";
+            resultCopy.focus();
+            btnEditToggle.innerHTML = `<i data-lucide="check" class="w-3 h-3"></i> 完了`;
+            btnEditToggle.classList.add('text-green-600');
+            btnClearText.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function disableEdit() {
+            isEditing = false;
+            resultCopy.contentEditable = "false";
+            resultTags.contentEditable = "false";
+            btnEditToggle.innerHTML = `<i data-lucide="edit-2" class="w-3 h-3"></i> 編集`;
+            btnEditToggle.classList.remove('text-green-600');
+            btnClearText.classList.add('hidden');
+            lucide.createIcons();
+        }
+
+        function clearText() {
+            resultCopy.innerText = '';
+            resultTags.innerText = '';
+            resultCopy.focus();
+            const originalHTML = btnClearText.innerHTML;
+            btnClearText.innerHTML = `<i data-lucide="check" class="w-3 h-3"></i> 消去`;
+            setTimeout(() => {
+                btnClearText.innerHTML = originalHTML;
+                lucide.createIcons();
+            }, 1000);
+        }
+
+        function copyToClipboard() {
+            const btn = document.getElementById('btn-copy');
+            const originalContent = btn.innerHTML;
+            const textToCopy = `${resultCopy.innerText}\n\n${resultTags.innerText}`;
+            
+            function showSuccess() {
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span class="font-bold">コピー完了</span>`;
+                btn.style.backgroundColor = "#10B981"; // Hardcoded green for success
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.style.backgroundColor = "";
+                    lucide.createIcons();
+                }, 2000);
+            }
+
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) showSuccess();
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function openSNS(platform) {
+            let url = '';
+            const text = encodeURIComponent(`${resultCopy.innerText} ${resultTags.innerText}`);
+            if (userSettings.urls[platform]) {
+                window.open(userSettings.urls[platform], '_blank');
+                return;
+            }
+            switch(platform) {
+                case 'twitter': url = `https://twitter.com/intent/tweet?text=${text}`; break;
+                case 'line': url = `https://line.me/R/msg/text/?${text}`; break;
+                case 'instagram': url = 'instagram://app'; break;
+                case 'facebook': url = 'https://www.facebook.com/'; break;
+            }
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -282,7 +282,7 @@
                             
                             <!-- カメラボタン -->
                             <div class="relative w-28 h-28 rounded-full border bg-gradient-to-br from-white/5 to-transparent backdrop-blur-md flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-500" style="border-color: var(--accent-color); color: var(--accent-color);">
-                                <i data-lucide="aperture" class="w-10 h-10 drop-shadow-md"></i>
+                                <i data-lucide="camera" class="w-10 h-10 drop-shadow-md"></i>
                             </div>
                             
                             <!-- バッジ -->
@@ -783,7 +783,7 @@
             const timeoutId = setTimeout(() => controller.abort(), 20000);
             
             try {
-                const res = await fetch('https://silly-dusk-3fa302.netlify.app/.netlify/functions/chat, {
+                const res = await fetch('/.netlify/functions/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text, imageBase64, imageMime }),

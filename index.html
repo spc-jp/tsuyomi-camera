@@ -1,938 +1,909 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>価値みっけ Premium</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap');
-        
-        /* --- CSS変数定義 --- */
-        :root {
-            --font-main: 'Noto Sans JP', sans-serif;
-            --font-head: 'Shippori Mincho', serif;
-        }
+<!DOCTYPE html> <html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>価値みっけ Premium</title> <script src="https://cdn.tailwindcss.com"></script> <script src="https://unpkg.com/lucide@latest"></script> <style> @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;700&display=swap');
+    :root {
+        --font-main: 'Noto Sans JP', sans-serif;
+        --font-head: 'Shippori Mincho', serif;
+    }
 
-        /* --- モード定義 (背景・文字色) --- */
-        
-        /* ダークモード (Default) */
-        body.mode-dark {
-            --bg-deep: #050511;
-            --bg-glass: rgba(18, 24, 43, 0.8);
-            --text-main: #ffffff;
-            --text-sub: #94a3b8;
-            --glass-border: 1px solid rgba(255, 255, 255, 0.12);
-            --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            --input-bg: rgba(0, 0, 0, 0.5);
-            --input-border: rgba(255, 255, 255, 0.1);
-            --modal-bg: #0a0a0a;
-            --bg-pattern-1: rgba(255, 255, 255, 0.03);
-            --bg-pattern-2: rgba(255, 255, 255, 0.03);
-        }
+    body.mode-dark {
+        --bg-deep: #050511;
+        --bg-glass: rgba(18, 24, 43, 0.8);
+        --text-main: #ffffff;
+        --text-sub: #94a3b8;
+        --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+        --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        --input-bg: rgba(0, 0, 0, 0.5);
+        --input-border: rgba(255, 255, 255, 0.1);
+        --modal-bg: #0a0a0a;
+        --bg-pattern-1: rgba(255, 255, 255, 0.03);
+        --bg-pattern-2: rgba(255, 255, 255, 0.03);
+    }
 
-        /* ライトモード */
-        body.mode-light {
-            --bg-deep: #f8fafc; /* Slate-50 */
-            --bg-glass: rgba(255, 255, 255, 0.75);
-            --text-main: #1e293b; /* Slate-800 */
-            --text-sub: #64748b; /* Slate-500 */
-            --glass-border: 1px solid rgba(255, 255, 255, 0.8);
-            --glass-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
-            --input-bg: rgba(255, 255, 255, 0.8);
-            --input-border: rgba(0, 0, 0, 0.1);
-            --modal-bg: #ffffff;
-            --bg-pattern-1: rgba(0, 0, 0, 0.03);
-            --bg-pattern-2: rgba(0, 0, 0, 0.03);
-        }
+    body.mode-light {
+        --bg-deep: #f8fafc;
+        --bg-glass: rgba(255, 255, 255, 0.75);
+        --text-main: #1e293b;
+        --text-sub: #64748b;
+        --glass-border: 1px solid rgba(255, 255, 255, 0.8);
+        --glass-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+        --input-bg: rgba(255, 255, 255, 0.8);
+        --input-border: rgba(0, 0, 0, 0.1);
+        --modal-bg: #ffffff;
+        --bg-pattern-1: rgba(0, 0, 0, 0.03);
+        --bg-pattern-2: rgba(0, 0, 0, 0.03);
+    }
 
-        /* --- テーマ定義 (アクセントカラー) --- */
+    body.theme-black {
+        --accent-color: #D4AF37;
+        --accent-glow: rgba(212, 175, 55, 0.4);
+        --btn-gradient: linear-gradient(135deg, #F3E3B6 0%, #D4AF37 50%, #8A6E20 100%);
+        --btn-text: #1a1a1a;
+        --bg-radial-1: rgba(212, 175, 55, 0.1);
+        --bg-radial-2: rgba(20, 20, 20, 0.1);
+    }
 
-        /* 1. Luxury Black (Gold Accent) */
-        body.theme-black {
-            --accent-color: #D4AF37;
-            --accent-glow: rgba(212, 175, 55, 0.4);
-            --btn-gradient: linear-gradient(135deg, #F3E3B6 0%, #D4AF37 50%, #8A6E20 100%);
-            --btn-text: #1a1a1a;
-            --bg-radial-1: rgba(212, 175, 55, 0.1);
-            --bg-radial-2: rgba(20, 20, 20, 0.1);
-        }
+    body.theme-blue {
+        --accent-color: #06b6d4;
+        --accent-glow: rgba(6, 182, 212, 0.5);
+        --btn-gradient: linear-gradient(135deg, #67e8f9 0%, #06b6d4 50%, #0e7490 100%);
+        --btn-text: #083344;
+        --bg-radial-1: rgba(6, 182, 212, 0.1);
+        --bg-radial-2: rgba(37, 99, 235, 0.1);
+    }
 
-        /* 2. Tech Blue */
-        body.theme-blue {
-            --accent-color: #06b6d4;
-            --accent-glow: rgba(6, 182, 212, 0.5);
-            --btn-gradient: linear-gradient(135deg, #67e8f9 0%, #06b6d4 50%, #0e7490 100%);
-            --btn-text: #083344;
-            --bg-radial-1: rgba(6, 182, 212, 0.1);
-            --bg-radial-2: rgba(37, 99, 235, 0.1);
-        }
+    body.theme-pink {
+        --accent-color: #fb7185;
+        --accent-glow: rgba(251, 113, 133, 0.5);
+        --btn-gradient: linear-gradient(135deg, #fecdd3 0%, #fb7185 50%, #be123c 100%);
+        --btn-text: #4c0519;
+        --bg-radial-1: rgba(244, 63, 94, 0.1);
+        --bg-radial-2: rgba(131, 24, 67, 0.1);
+    }
 
-        /* 3. Glamorous Pink */
-        body.theme-pink {
-            --accent-color: #fb7185;
-            --accent-glow: rgba(251, 113, 133, 0.5);
-            --btn-gradient: linear-gradient(135deg, #fecdd3 0%, #fb7185 50%, #be123c 100%);
-            --btn-text: #4c0519;
-            --bg-radial-1: rgba(244, 63, 94, 0.1);
-            --bg-radial-2: rgba(131, 24, 67, 0.1);
-        }
+    body.theme-orange {
+        --accent-color: #f97316;
+        --accent-glow: rgba(249, 115, 22, 0.5);
+        --btn-gradient: linear-gradient(135deg, #fdba74 0%, #f97316 50%, #c2410c 100%);
+        --btn-text: #431407;
+        --bg-radial-1: rgba(249, 115, 22, 0.1);
+        --bg-radial-2: rgba(234, 88, 12, 0.1);
+    }
 
-        /* 4. Vitamin Orange */
-        body.theme-orange {
-            --accent-color: #f97316;
-            --accent-glow: rgba(249, 115, 22, 0.5);
-            --btn-gradient: linear-gradient(135deg, #fdba74 0%, #f97316 50%, #c2410c 100%);
-            --btn-text: #431407;
-            --bg-radial-1: rgba(249, 115, 22, 0.1);
-            --bg-radial-2: rgba(234, 88, 12, 0.1);
-        }
+    body {
+        font-family: var(--font-main);
+        background-color: var(--bg-deep);
+        background-image: 
+            radial-gradient(circle at 10% 10%, var(--bg-radial-1) 0%, transparent 60%),
+            radial-gradient(circle at 90% 90%, var(--bg-radial-2) 0%, transparent 60%);
+        color: var(--text-main);
+        touch-action: manipulation;
+        min-height: 100vh;
+        transition: background-color 0.5s ease, color 0.5s ease;
+    }
 
-        /* --- スタイル適用 --- */
-        body {
-            font-family: var(--font-main);
-            background-color: var(--bg-deep);
-            background-image: 
-                radial-gradient(circle at 10% 10%, var(--bg-radial-1) 0%, transparent 60%),
-                radial-gradient(circle at 90% 90%, var(--bg-radial-2) 0%, transparent 60%);
-            color: var(--text-main);
-            touch-action: manipulation;
-            min-height: 100vh;
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
+    .font-head { font-family: var(--font-head); letter-spacing: 0.08em; }
 
-        .font-head { font-family: var(--font-head); letter-spacing: 0.08em; }
+    .glass-panel {
+        background: var(--bg-glass);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        transition: all 0.5s ease;
+    }
 
-        /* ガラスパネル */
-        .glass-panel {
-            background: var(--bg-glass);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: var(--glass-border);
-            box-shadow: var(--glass-shadow);
-            transition: all 0.5s ease;
-        }
+    .btn-premium {
+        background: var(--btn-gradient);
+        color: var(--btn-text);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        box-shadow: 0 4px 25px var(--accent-glow);
+        border: 1px solid rgba(255,255,255,0.3);
+        text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    }
+    .btn-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 40px var(--accent-glow);
+        filter: brightness(1.15);
+    }
+    .btn-premium::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -150%;
+        width: 70%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+        transform: skewX(-25deg);
+        transition: 0.6s;
+    }
+    .btn-premium:hover::after { left: 150%; transition: 0.7s; }
 
-        /* プレミアムボタン */
-        .btn-premium {
-            background: var(--btn-gradient);
-            color: var(--btn-text);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 25px var(--accent-glow);
-            border: 1px solid rgba(255,255,255,0.3);
-            text-shadow: 0 1px 0 rgba(255,255,255,0.3);
-        }
-        .btn-premium:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px var(--accent-glow);
-            filter: brightness(1.15);
-        }
-        .btn-premium::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -150%;
-            width: 70%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-            transform: skewX(-25deg);
-            transition: 0.6s;
-        }
-        .btn-premium:hover::after { left: 150%; transition: 0.7s; }
+    .btn-outline {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--input-border);
+        color: var(--text-sub);
+        transition: all 0.3s;
+    }
+    .btn-outline:hover {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+        background: var(--bg-radial-1);
+        box-shadow: 0 0 15px var(--accent-glow);
+    }
 
-        /* アウトラインボタン */
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--input-border);
-            color: var(--text-sub);
-            transition: all 0.3s;
-        }
-        .btn-outline:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            background: var(--bg-radial-1);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
+    .input-dark {
+        background: var(--input-bg);
+        border: 1px solid var(--input-border);
+        color: var(--text-main);
+        transition: all 0.3s;
+    }
+    .input-dark:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 1px var(--accent-glow);
+    }
+    .input-dark::placeholder { color: var(--text-sub); opacity: 0.5; }
 
-        /* 入力エリア */
-        .input-dark {
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            color: var(--text-main);
-            transition: all 0.3s;
-        }
-        .input-dark:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 1px var(--accent-glow);
-        }
-        .input-dark::placeholder { color: var(--text-sub); opacity: 0.5; }
+    .fade-in { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* アニメーション */
-        .fade-in { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .scanning-line {
+        width: 100%; height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        position: absolute; top: 0; left: 0;
+        animation: scan 2.5s ease-in-out infinite;
+        box-shadow: 0 0 25px var(--accent-color);
+    }
+    @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
 
-        .scanning-line {
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-            position: absolute; top: 0; left: 0;
-            animation: scan 2.5s ease-in-out infinite;
-            box-shadow: 0 0 25px var(--accent-color);
-        }
-        @keyframes scan { 0% { top: 0; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+    .icon-btn {
+        background: transparent;
+        border: 1px solid var(--input-border);
+        transition: all 0.2s;
+        color: var(--text-sub);
+    }
+    .icon-btn:hover { 
+        background: var(--bg-radial-1); 
+        border-color: var(--accent-color); 
+        color: var(--accent-color);
+        transform: translateY(-2px); 
+    }
 
-        /* SNSアイコン */
-        .icon-btn {
-            background: transparent;
-            border: 1px solid var(--input-border);
-            transition: all 0.2s;
-            color: var(--text-sub);
-        }
-        .icon-btn:hover { 
-            background: var(--bg-radial-1); 
-            border-color: var(--accent-color); 
-            color: var(--accent-color);
-            transform: translateY(-2px); 
-        }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--text-sub); opacity: 0.2; border-radius: 2px; }
+    
+    .modal-content {
+        background-color: var(--modal-bg);
+        color: var(--text-main);
+    }
 
-        /* スクロールバー */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--text-sub); opacity: 0.2; border-radius: 2px; }
-        
-        /* 設定モーダルのスタイル */
-        .modal-content {
-            background-color: var(--modal-bg);
-            color: var(--text-main);
-        }
+    .theme-card {
+        border: 1px solid var(--input-border);
+        background: var(--bg-pattern-1);
+        transition: all 0.2s;
+    }
+    .theme-radio:checked + .theme-card {
+        border-color: var(--accent-color);
+        background: var(--bg-radial-1);
+        box-shadow: 0 0 15px var(--accent-glow) inset;
+    }
 
-        /* テーマ選択カード */
-        .theme-card {
-            border: 1px solid var(--input-border);
-            background: var(--bg-pattern-1);
-            transition: all 0.2s;
-        }
-        .theme-radio:checked + .theme-card {
-            border-color: var(--accent-color);
-            background: var(--bg-radial-1);
-            box-shadow: 0 0 15px var(--accent-glow) inset;
-        }
+    .mode-btn {
+        background: var(--bg-pattern-2);
+        border: 1px solid var(--input-border);
+        color: var(--text-sub);
+    }
+    .mode-radio:checked + .mode-btn {
+        background: var(--btn-gradient);
+        color: var(--btn-text);
+        border-color: transparent;
+        box-shadow: 0 2px 10px var(--accent-glow);
+        font-weight: bold;
+    }
+</style>
 
-        /* モード選択ボタン */
-        .mode-btn {
-            background: var(--bg-pattern-2);
-            border: 1px solid var(--input-border);
-            color: var(--text-sub);
-        }
-        .mode-radio:checked + .mode-btn {
-            background: var(--btn-gradient);
-            color: var(--btn-text);
-            border-color: transparent;
-            box-shadow: 0 2px 10px var(--accent-glow);
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body class="theme-blue mode-light flex flex-col items-center justify-center p-4 sm:p-6 transition-colors duration-500">
-
-    <!-- メインコンテナ -->
-    <main class="w-full max-w-[420px] glass-panel rounded-[2.5rem] overflow-hidden min-h-[820px] flex flex-col relative ring-1 ring-white/10">
-        
-        <!-- ヘッダー -->
-        <header class="pt-10 pb-6 px-6 text-center relative z-10">
-            <div class="flex justify-between items-center mb-6 px-1 relative z-20">
-                <button onclick="openHelp()" class="p-2 rounded-full hover:bg-white/10 transition-colors opacity-70 hover:opacity-100" style="color: var(--text-main);">
-                    <i data-lucide="help-circle" class="w-5 h-5"></i>
-                </button>
-                
-                <!-- バッジ -->
-                <div class="px-4 py-1.5 rounded-full border flex items-center gap-2 shadow-lg backdrop-blur-md" style="border-color: var(--accent-color); background: var(--bg-radial-1);">
-                    <i data-lucide="gem" class="w-3 h-3" style="color: var(--accent-color);"></i>
-                    <span class="text-[9px] font-bold tracking-[0.2em] uppercase" style="color: var(--accent-color);">Premium</span>
-                </div>
-
-                <button onclick="openSettings()" class="p-2 rounded-full hover:bg-white/10 transition-colors opacity-70 hover:opacity-100" style="color: var(--text-main);">
-                    <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <div class="relative z-10 space-y-2">
-                <h1 class="font-head text-3xl font-bold drop-shadow-xl tracking-wider" style="color: var(--text-main);">
-                    価値みっけ
-                </h1>
-                <p class="text-[10px] tracking-[0.15em] font-light border-t inline-block pt-2 px-6" style="color: var(--text-sub); border-color: var(--input-border);">
-                    VISUAL VALUE FINDER
-                </p>
-            </div>
-        </header>
-
-        <!-- コンテンツエリア -->
-        <div id="app-content" class="flex-1 flex flex-col relative overflow-hidden">
+</head> <body class="theme-blue mode-light flex flex-col items-center justify-center p-4 sm:p-6 transition-colors duration-500">
+<main class="w-full max-w-[420px] glass-panel rounded-[2.5rem] overflow-hidden min-h-[820px] flex flex-col relative ring-1 ring-white/10">
+    
+    <header class="pt-10 pb-6 px-6 text-center relative z-10">
+        <div class="flex justify-between items-center mb-6 px-1 relative z-20">
+            <button onclick="openHelp()" class="p-2 rounded-full hover:bg-white/10 transition-colors opacity-70 hover:opacity-100" style="color: var(--text-main);">
+                <i data-lucide="help-circle" class="w-5 h-5"></i>
+            </button>
             
-            <!-- Home Screen -->
-            <div id="screen-home" class="flex flex-col h-full p-6 fade-in overflow-y-auto">
-                <div class="flex-1 flex flex-col items-center justify-center space-y-10 w-full py-4">
-                    
-                    <!-- ヒーローエリア -->
-                    <div class="text-center space-y-8 w-full">
-                        <div class="relative inline-block group cursor-pointer" onclick="document.getElementById('camera-input').click()">
-                            <!-- 光彩エフェクト -->
-                            <div class="absolute inset-0 rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-700" style="background: var(--accent-color);"></div>
-                            
-                            <!-- カメラボタン -->
-                            <div class="relative w-28 h-28 rounded-full border bg-gradient-to-br from-white/5 to-transparent backdrop-blur-md flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-500" style="border-color: var(--accent-color); color: var(--accent-color);">
-                                <i data-lucide="camera" class="w-10 h-10 drop-shadow-md"></i>
-                            </div>
-                            
-                            <!-- バッジ -->
-                            <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-black/80 border text-[9px] font-bold px-3 py-1 rounded-full whitespace-nowrap tracking-wider shadow-lg" style="border-color: var(--accent-color); color: var(--accent-color);">
-                                SMART SCAN
-                            </div>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <h2 class="text-lg font-bold font-head leading-relaxed" style="color: var(--text-main);">
-                                一枚の写真から、<br>
-                                <span class="border-b pb-1" style="color: var(--accent-color); border-color: var(--input-border);">ビジネスの価値</span>を言語化。
-                            </h2>
-                            <p class="text-xs leading-7 font-light" style="color: var(--text-sub);">
-                                視覚情報と文脈を高度に解析。<br>
-                                プロ級のライティングを、あなたの手元に。
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 入力フォーム -->
-                    <div class="w-full space-y-5">
-                        <div class="relative group">
-                            <textarea id="userText" class="input-dark w-full p-5 rounded-2xl text-sm min-h-[110px] resize-none shadow-inner" placeholder="【解析のヒント】&#13;&#10;例：30代女性向けの隠れ家サロン。&#13;&#10;夜限定の特別コースをアピールしたい。"></textarea>
-                            <div class="absolute top-4 right-4 pointer-events-none group-focus-within:text-accent transition-colors" style="color: var(--text-sub);">
-                                <i data-lucide="pen-tool" class="w-4 h-4"></i>
-                            </div>
-                        </div>
-
-                        <input type="file" id="camera-input" accept="image/*" class="hidden">
-                        
-                        <button onclick="document.getElementById('camera-input').click()" 
-                            class="btn-premium w-full py-4 rounded-xl flex items-center justify-center gap-3 font-bold text-sm tracking-widest shadow-xl">
-                            <i data-lucide="camera" class="w-5 h-5"></i>
-                            写真を選んで解析開始
-                        </button>
-                        
-                        <button onclick="handleNoImageAnalysis()" 
-                            class="btn-outline w-full py-3.5 rounded-xl flex items-center justify-center gap-2 text-xs font-medium tracking-wide">
-                            <i data-lucide="text-cursor-input" class="w-4 h-4"></i>
-                            テキスト情報のみで生成
-                        </button>
-                    </div>
-                </div>
+            <div class="px-4 py-1.5 rounded-full border flex items-center gap-2 shadow-lg backdrop-blur-md" style="border-color: var(--accent-color); background: var(--bg-radial-1);">
+                <i data-lucide="gem" class="w-3 h-3" style="color: var(--accent-color);"></i>
+                <span class="text-[9px] font-bold tracking-[0.2em] uppercase" style="color: var(--accent-color);">Premium</span>
             </div>
 
-            <!-- Loading Screen -->
-            <div id="screen-loading" class="hidden flex flex-col items-center justify-center h-full p-8 gap-12 fade-in absolute inset-0 z-50 backdrop-blur-xl" style="background: var(--bg-glass);">
-                <div class="relative w-64 h-64 rounded-2xl overflow-hidden border shadow-[0_0_50px_rgba(0,0,0,0.2)]" style="border-color: var(--input-border);">
-                    <img id="preview-image-loading" class="w-full h-full object-cover opacity-60 grayscale" src="" alt="解析中">
-                    <div class="absolute inset-0 bg-gradient-to-t via-transparent to-transparent" style="from: var(--bg-deep);"></div>
-                    <div class="scanning-line"></div>
-                    
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-20 h-20 border-2 rounded-full flex items-center justify-center animate-[spin_3s_linear_infinite]" style="border-color: var(--input-border); border-top-color: var(--accent-color);">
-                            <div class="w-16 h-16 border-t-2 rounded-full animate-[spin_2s_linear_infinite_reverse]" style="border-color: var(--input-border); border-top-color: var(--accent-color);"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center space-y-3">
-                    <h3 class="text-xl font-head font-bold tracking-widest" style="color: var(--text-main);">ANALYZING...</h3>
-                    <p class="text-xs font-mono" style="color: var(--text-sub);">文脈を理解し、最適解を導き出しています</p>
-                </div>
-            </div>
-
-            <!-- Result Screen -->
-            <div id="screen-result" class="hidden flex flex-col h-full fade-in relative z-10">
-                
-                <!-- ヘッダー画像 -->
-                <div class="relative w-full h-60 shrink-0">
-                    <img id="preview-image-result" class="w-full h-full object-cover opacity-60" src="" alt="">
-                    <div class="absolute inset-0 bg-gradient-to-b via-transparent" style="from: transparent; to: var(--bg-deep);"></div>
-                    
-                    <button onclick="resetApp()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur text-white/70 flex items-center justify-center hover:bg-black/60 hover:text-white border border-white/10 transition-all">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
-
-                    <div class="absolute bottom-6 left-6 border-l-2 pl-3" style="border-color: var(--accent-color);">
-                        <span class="text-[10px] font-bold tracking-widest uppercase block mb-1" style="color: var(--accent-color);">Generated</span>
-                        <h2 class="font-head font-bold text-2xl tracking-wide text-white">分析完了</h2>
-                    </div>
-                </div>
-
-                <!-- コンテンツ -->
-                <div class="flex-1 px-6 pb-10 overflow-y-auto -mt-4 relative backdrop-blur-md rounded-t-3xl border-t shadow-[0_-10px_40px_rgba(0,0,0,0.3)]" style="background: var(--bg-deep); border-color: var(--input-border);">
-                    
-                    <!-- エラー表示 -->
-                    <div id="error-container" class="hidden mb-6 p-4 rounded-xl bg-red-950/50 border border-red-500/20 text-red-200 text-sm mt-6">
-                        <div class="flex items-center gap-2 font-bold mb-1">
-                            <i data-lucide="alert-triangle" class="w-4 h-4"></i> 生成エラー
-                        </div>
-                        <p id="error-message" class="text-xs opacity-70"></p>
-                    </div>
-
-                    <div id="result-container" class="space-y-8 mt-8">
-                        <!-- 生成カード -->
-                        <div class="p-7 rounded-3xl relative group border" style="background: var(--bg-pattern-1); border-color: var(--input-border);">
-                            <!-- 背景の光 -->
-                            <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[70px] opacity-10 group-hover:opacity-20 transition-opacity" style="background: var(--accent-color);"></div>
-
-                            <div class="space-y-6 relative z-10">
-                                <!-- タイトル -->
-                                <div>
-                                    <p class="text-[9px] font-bold mb-2 tracking-[0.2em] opacity-80" style="color: var(--accent-color);">CATCH COPY</p>
-                                    <h3 id="result-title" class="text-xl font-bold font-head leading-relaxed tracking-wide" style="color: var(--text-main);"></h3>
-                                </div>
-
-                                <!-- 本文 -->
-                                <div>
-                                    <p class="text-[9px] font-bold mb-2 tracking-[0.2em]" style="color: var(--text-sub);">STORY</p>
-                                    <div id="result-post" class="text-sm leading-8 font-light whitespace-pre-line tracking-wide" style="color: var(--text-main); opacity: 0.9;"></div>
-                                </div>
-
-                                <!-- ハッシュタグ -->
-                                <div class="pt-5 border-t" style="border-color: var(--input-border);">
-                                    <p id="result-hashtags" class="text-xs font-mono leading-relaxed opacity-80 break-words" style="color: var(--accent-color);"></p>
-                                </div>
-
-                                <!-- CTA -->
-                                <div class="mt-2 p-4 rounded-lg border-l-2" style="background: var(--bg-pattern-2); border-color: var(--accent-color);">
-                                    <p class="text-[9px] mb-1 tracking-widest" style="color: var(--text-sub);">NEXT ACTION</p>
-                                    <p id="result-cta" class="text-sm font-bold" style="color: var(--text-main);"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- アクション -->
-                        <div class="space-y-4">
-                            <button onclick="copyAll()" id="btn-copy-all" 
-                                class="btn-premium w-full py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg text-sm font-bold tracking-widest">
-                                <i data-lucide="copy" class="w-4 h-4"></i>
-                                すべてコピー
-                            </button>
-                            
-                            <button onclick="copyTitle()" id="btn-copy-title" 
-                                class="w-full py-2 text-xs hover:opacity-100 transition-colors flex items-center justify-center gap-2 tracking-wide opacity-70" style="color: var(--text-sub);">
-                                <i data-lucide="type" class="w-3 h-3"></i>
-                                タイトルのみコピー
-                            </button>
-
-                            <!-- SNS Icons -->
-                            <div class="grid grid-cols-4 gap-3 pt-4 border-t" style="border-color: var(--input-border);">
-                                <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('instagram')">
-                                    <i data-lucide="instagram" class="w-5 h-5"></i>
-                                </button>
-                                <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('facebook')">
-                                    <i data-lucide="facebook" class="w-5 h-5"></i>
-                                </button>
-                                <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('twitter')">
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                                </button>
-                                <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('line')">
-                                    <span class="text-xs font-bold">LINE</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <button onclick="openSettings()" class="p-2 rounded-full hover:bg-white/10 transition-colors opacity-70 hover:opacity-100" style="color: var(--text-main);">
+                <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+            </button>
         </div>
 
-        <!-- フッター -->
-        <footer class="py-4 text-center z-10 border-t w-full mt-auto backdrop-blur-sm" style="border-color: var(--input-border); background: var(--bg-glass);">
-            <p class="text-[10px] font-medium tracking-[0.2em] uppercase opacity-50" style="color: var(--text-sub);">
-                Premium Edition v6.0 © 2026 SPC
+        <div class="relative z-10 space-y-2">
+            <h1 class="font-head text-3xl font-bold drop-shadow-xl tracking-wider" style="color: var(--text-main);">
+                価値みっけ
+            </h1>
+            <p class="text-[10px] tracking-[0.15em] font-light border-t inline-block pt-2 px-6" style="color: var(--text-sub); border-color: var(--input-border);">
+                VISUAL VALUE FINDER
             </p>
-        </footer>
-
-        <!-- Settings Modal -->
-        <div id="settings-modal" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end sm:justify-center fade-in">
-            <div class="modal-content w-full rounded-t-3xl sm:rounded-3xl sm:w-[90%] sm:mx-auto p-8 shadow-2xl border max-h-[90vh] flex flex-col" style="border-color: var(--input-border);">
-                <div class="flex items-center justify-between mb-8 shrink-0">
-                    <h2 class="text-lg font-bold flex items-center gap-2 tracking-wide font-head">
-                        <i data-lucide="sliders-horizontal" class="w-5 h-5" style="color: var(--accent-color);"></i>
-                        システム設定
-                    </h2>
-                    <button onclick="closeSettings()" class="p-2 -mr-2 opacity-60 hover:opacity-100 transition-colors" style="color: var(--text-main);">
-                        <i data-lucide="x" class="w-6 h-6"></i>
-                    </button>
-                </div>
-                <div class="space-y-8 overflow-y-auto pb-6 flex-1">
-                    
-                    <!-- 外観モード設定 -->
-                    <div>
-                        <h3 class="text-xs font-bold uppercase tracking-widest mb-4 opacity-80" style="color: var(--accent-color);">外観モード (Appearance)</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="cursor-pointer relative">
-                                <input type="radio" name="mode" value="mode-dark" class="mode-radio hidden" onchange="saveSettings()">
-                                <div class="mode-btn p-4 rounded-xl text-center transition-all">
-                                    <div class="text-sm mb-1">Dark Mode</div>
-                                    <p class="text-[10px] opacity-60">夜間・集中</p>
-                                </div>
-                            </label>
-                            <label class="cursor-pointer relative">
-                                <input type="radio" name="mode" value="mode-light" class="mode-radio hidden" checked onchange="saveSettings()">
-                                <div class="mode-btn p-4 rounded-xl text-center transition-all">
-                                    <div class="text-sm mb-1">Light Mode</div>
-                                    <p class="text-[10px] opacity-60">昼間・明瞭</p>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- テーマ選択 -->
-                    <div>
-                        <h3 class="text-xs font-bold uppercase tracking-widest mb-4 opacity-80" style="color: var(--accent-color);">アクセントカラー (Theme Color)</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="cursor-pointer relative">
-                                <input type="radio" name="theme" value="theme-black" class="theme-radio hidden" onchange="saveSettings()">
-                                <div class="theme-card p-4 rounded-xl transition-all">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <div class="w-3 h-3 rounded-full bg-[#D4AF37]"></div>
-                                        <div class="text-sm font-bold">Luxury Black</div>
-                                    </div>
-                                    <p class="text-[10px] opacity-60">圧倒的な高級感</p>
-                                </div>
-                            </label>
-                            <label class="cursor-pointer relative">
-                                <input type="radio" name="theme" value="theme-blue" class="theme-radio hidden" checked onchange="saveSettings()">
-                                <div class="theme-card p-4 rounded-xl transition-all">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <div class="w-3 h-3 rounded-full bg-[#06b6d4]"></div>
-                                        <div class="text-sm font-bold">Tech Blue</div>
-                                    </div>
-                                    <p class="text-[10px] opacity-60">知的・先進的</p>
-                                </div>
-                            </label>
-                            <label class="cursor-pointer relative">
-                                <input type="radio" name="theme" value="theme-pink" class="theme-radio hidden" onchange="saveSettings()">
-                                <div class="theme-card p-4 rounded-xl transition-all">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <div class="w-3 h-3 rounded-full bg-[#fb7185]"></div>
-                                        <div class="text-sm font-bold">Glamorous Pink</div>
-                                    </div>
-                                    <p class="text-[10px] opacity-60">華やか・モダン</p>
-                                </div>
-                            </label>
-                            <label class="cursor-pointer relative">
-                                <input type="radio" name="theme" value="theme-orange" class="theme-radio hidden" onchange="saveSettings()">
-                                <div class="theme-card p-4 rounded-xl transition-all">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <div class="w-3 h-3 rounded-full bg-[#f97316]"></div>
-                                        <div class="text-sm font-bold">Vitamin Orange</div>
-                                    </div>
-                                    <p class="text-[10px] opacity-60">活力・温かみ</p>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- 連携アカウント -->
-                    <div>
-                        <h3 class="text-xs font-bold uppercase tracking-widest mb-4 opacity-80" style="color: var(--accent-color);">連携アカウント</h3>
-                        <div class="space-y-4">
-                            <div class="relative">
-                                <i data-lucide="instagram" class="absolute left-3 top-3 w-4 h-4 opacity-50" style="color: var(--text-main);"></i>
-                                <input id="input-insta" type="url" placeholder="Instagram Profile URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
-                            </div>
-                            <div class="relative">
-                                <i data-lucide="facebook" class="absolute left-3 top-3 w-4 h-4 opacity-50" style="color: var(--text-main);"></i>
-                                <input id="input-fb" type="url" placeholder="Facebook Page URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
-                            </div>
-                            <div class="relative">
-                                <svg class="absolute left-3 top-3 w-4 h-4 opacity-50 fill-current" style="color: var(--text-main);" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                                <input id="input-x" type="url" placeholder="X (Twitter) URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
-                            </div>
-                            <div class="relative">
-                                <span class="absolute left-3 top-3.5 text-[10px] font-bold opacity-50" style="color: var(--text-main);">LINE</span>
-                                <input id="input-line" type="url" placeholder="LINE Official Account URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-6 pt-6 border-t shrink-0" style="border-color: var(--input-border);">
-                    <button onclick="saveAndCloseSettings()" class="btn-premium w-full py-4 rounded-xl text-sm font-bold tracking-widest">
-                        設定を保存する
-                    </button>
-                </div>
-            </div>
         </div>
+    </header>
 
-        <!-- Help Modal -->
-        <div id="help-modal" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end sm:justify-center fade-in">
-            <div class="modal-content w-full rounded-t-3xl sm:rounded-3xl sm:w-[90%] sm:mx-auto p-8 shadow-2xl border max-h-[85vh] flex flex-col" style="border-color: var(--input-border);">
-                <div class="flex items-center justify-between mb-8 shrink-0">
-                    <h2 class="text-lg font-bold flex items-center gap-2 font-head tracking-wide">
-                        <i data-lucide="book-open" class="w-5 h-5" style="color: var(--accent-color);"></i>
-                        活用ガイド
-                    </h2>
-                    <button onclick="closeHelp()" class="p-2 -mr-2 opacity-60 hover:opacity-100 transition-colors" style="color: var(--text-main);">
-                        <i data-lucide="x" class="w-6 h-6"></i>
-                    </button>
-                </div>
-                <div class="space-y-8 overflow-y-auto pb-6 flex-1 text-sm leading-relaxed" style="color: var(--text-sub);">
-                    <div class="p-5 rounded-2xl border relative overflow-hidden" style="background: var(--bg-pattern-1); border-color: var(--accent-color);">
-                        <h3 class="font-bold mb-2 tracking-wide flex items-center gap-2" style="color: var(--accent-color);">
-                            <i data-lucide="cpu" class="w-4 h-4"></i>
-                            プロフェッショナル・エンジン
-                        </h3>
-                        <p class="text-xs leading-6">このアプリは高度な言語処理システムを搭載しています。写真の文脈を深く理解し、顧客の感情を動かす「プロ品質の文章」を作成します。</p>
-                    </div>
-                    
-                    <div class="space-y-6">
-                        <h4 class="text-xs font-bold uppercase tracking-widest border-b pb-2" style="color: var(--text-sub); border-color: var(--input-border);">HOW TO USE</h4>
-                        
-                        <div class="flex gap-5">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 border shadow-lg" style="background: var(--bg-deep); color: var(--accent-color); border-color: var(--input-border);">1</div>
-                            <div>
-                                <p class="font-bold mb-1" style="color: var(--text-main);">写真をアップロード</p>
-                                <p class="text-xs">スマホ内の写真を選択するか、その場で撮影してください。</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-5">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 border shadow-lg" style="background: var(--bg-deep); color: var(--accent-color); border-color: var(--input-border);">2</div>
-                            <div>
-                                <p class="font-bold mb-1" style="color: var(--text-main);">ヒントを入力（任意）</p>
-                                <p class="text-xs">「誰に伝えたいか」「価格」などを入力すると、精度が劇的に向上します。</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-5">
-                            <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 border shadow-lg" style="background: var(--bg-deep); color: var(--accent-color); border-color: var(--input-border);">3</div>
-                            <div>
-                                <p class="font-bold mb-1" style="color: var(--text-main);">コピー＆ペースト</p>
-                                <p class="text-xs">数秒で生成された文章をコピーし、SNSに貼り付けて完了です。</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-6 pt-6 border-t shrink-0" style="border-color: var(--input-border);">
-                    <button onclick="closeHelp()" class="w-full py-4 rounded-xl text-sm font-bold transition-colors tracking-widest" style="background: var(--bg-deep); color: var(--text-sub);">
-                        閉じる
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <script>
-        lucide.createIcons();
-
-        // Elements
-        const fileInput = document.getElementById('camera-input');
-        const inputText = document.getElementById('userText');
-        const screenHome = document.getElementById('screen-home');
-        const screenLoading = document.getElementById('screen-loading');
-        const screenResult = document.getElementById('screen-result');
-        const previewLoading = document.getElementById('preview-image-loading');
-        const previewResult = document.getElementById('preview-image-result');
+    <div id="app-content" class="flex-1 flex flex-col relative overflow-hidden">
         
-        const resultTitle = document.getElementById('result-title');
-        const resultPost = document.getElementById('result-post');
-        const resultHashtags = document.getElementById('result-hashtags');
-        const resultCta = document.getElementById('result-cta');
-        const errorContainer = document.getElementById('error-container');
-        const errorMessage = document.getElementById('error-message');
-
-        const settingsModal = document.getElementById('settings-modal');
-        const helpModal = document.getElementById('help-modal');
-        const inputInsta = document.getElementById('input-insta');
-        const inputFb = document.getElementById('input-fb');
-        const inputX = document.getElementById('input-x');
-        const inputLine = document.getElementById('input-line');
-
-        // デフォルト設定 (Light Mode & Tech Blue)
-        let userSettings = {
-            mode: 'mode-light',
-            theme: 'theme-blue',
-            urls: { instagram: '', facebook: '', twitter: '', line: '' }
-        };
-
-        // 初期化
-        window.addEventListener('load', () => {
-            const saved = localStorage.getItem('bizCameraSettings_v4');
-            if (saved) {
-                userSettings = JSON.parse(saved);
-            }
-            applySettings();
-        });
-
-        // テーマ適用ロジック
-        function applySettings() {
-            document.body.className = '';
-            document.body.classList.add(userSettings.mode);
-            document.body.classList.add(userSettings.theme);
-            document.body.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'p-4', 'sm:p-6', 'transition-colors', 'duration-500');
-            
-            lucide.createIcons();
-        }
-
-        function openSettings() {
-            inputInsta.value = userSettings.urls.instagram;
-            inputFb.value = userSettings.urls.facebook;
-            inputX.value = userSettings.urls.twitter;
-            inputLine.value = userSettings.urls.line;
-            
-            // モードとテーマのラジオボタン状態反映
-            const modeRadio = document.querySelector(`input[name="mode"][value="${userSettings.mode}"]`);
-            if(modeRadio) modeRadio.checked = true;
-
-            const themeRadio = document.querySelector(`input[name="theme"][value="${userSettings.theme}"]`);
-            if(themeRadio) themeRadio.checked = true;
-            
-            settingsModal.classList.remove('hidden');
-        }
-
-        function closeSettings() { settingsModal.classList.add('hidden'); }
-
-        function saveAndCloseSettings() {
-            saveSettings();
-            closeSettings();
-        }
-
-        function saveSettings() {
-            userSettings.urls.instagram = inputInsta.value.trim();
-            userSettings.urls.facebook = inputFb.value.trim();
-            userSettings.urls.twitter = inputX.value.trim();
-            userSettings.urls.line = inputLine.value.trim();
-            
-            const checkedMode = document.querySelector('input[name="mode"]:checked');
-            if(checkedMode) userSettings.mode = checkedMode.value;
-
-            const checkedTheme = document.querySelector('input[name="theme"]:checked');
-            if(checkedTheme) userSettings.theme = checkedTheme.value;
-
-            localStorage.setItem('bizCameraSettings_v4', JSON.stringify(userSettings));
-            applySettings();
-        }
-
-        function openHelp() { helpModal.classList.remove('hidden'); }
-        function closeHelp() { helpModal.classList.add('hidden'); }
-
-        // --- Image Processing ---
-        function resizeImage(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-                        const max = 1024;
-                        if (width > max) {
-                            height = Math.round(height * max / width);
-                            width = max;
-                        }
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                        resolve({
-                            base64: dataUrl.split(',')[1],
-                            mime: 'image/jpeg',
-                            preview: dataUrl
-                        });
-                    };
-                    img.onerror = reject;
-                    img.src = e.target.result;
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // --- Mock Data ---
-        const mockData = [
-            {
-                title: "【信頼を、形にする技術】",
-                post: "見えない細部にこそ、職人の魂は宿る。\n\n創業から50年、私たちが守り続けてきたのは「妥協なき品質」です。\n一枚の写真では伝えきれない手触りや質感を、ぜひ実物でお確かめください。\n\n貴社のプロジェクトに、確かな価値を。",
-                hashtags: ['#職人技', '#品質管理', '#伝統工芸', '#プロフェッショナル', '#ビジネスパートナー'],
-                cta: "まずは無料相談から"
-            },
-            {
-                title: "【日常に、小さな贅沢を】",
-                post: "忙しい毎日に、ほっと一息つける瞬間を。\n\nこだわりの素材と丁寧な手仕事で仕上げた一品は、\nあなたの心を満たす魔法のスイッチ。\n\n「自分へのご褒美」に、いかがですか？\n明日もまた、頑張れる気がするはず。",
-                hashtags: ['#自分へのご褒美', '#丁寧な暮らし', '#リラックスタイム', '#お気に入り', '#暮らしを楽しむ'],
-                cta: "今すぐチェック"
-            },
-            {
-                title: "【心洗われる、非日常へ】",
-                post: "ただ、そこにいるだけで心が解けていく。\n\n風の音、光の移ろい、木々の香り。\n五感すべてで感じる自然のアートが、\n日々の喧騒を忘れさせてくれます。\n\n次の休日は、少し遠くへ出かけませんか？",
-                hashtags: ['#絶景', '#大人の休日', '#リフレッシュ', '#自然が好き', '#旅の思い出'],
-                cta: "ご予約受付中"
-            },
-            {
-                title: "【本質を、愛でる】",
-                post: "Less is More.\n\n余計な装飾を削ぎ落とすことで見えてくる、\n素材本来の美しさと機能性。\n\n静寂の中に佇む存在感が、\n空間の質を一段階引き上げます。",
-                hashtags: ['#ミニマリズム', '#シンプルライフ', '#デザイン', '#機能美', '#モノトーン'],
-                cta: "詳細を見る"
-            }
-        ];
-
-        // --- API & Process Logic ---
-        async function callApi(text, imageBase64, imageMime) {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 20000);
-            
-            try {
-                const res = await fetch('/.netlify/functions/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text, imageBase64, imageMime }),
-                    signal: controller.signal
-                });
-
-                if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                return await res.json();
-
-            } catch (err) {
-                console.warn('Network issue or demo mode:', err);
-                await new Promise(resolve => setTimeout(resolve, 2500));
-                const mock = mockData[Math.floor(Math.random() * mockData.length)];
-                return {
-                    title: mock.title,
-                    post: mock.post,
-                    hashtags: mock.hashtags,
-                    cta: mock.cta
-                };
-            } finally {
-                clearTimeout(timeoutId);
-            }
-        }
-
-        // Main Flow
-        fileInput.addEventListener('change', async function(e) {
-            if (e.target.files && e.target.files[0]) {
-                await processAnalysis(e.target.files[0]);
-            }
-        });
-
-        async function handleNoImageAnalysis() {
-            await processAnalysis(null);
-        }
-
-        async function processAnalysis(file) {
-            screenHome.classList.add('hidden');
-            screenLoading.classList.remove('hidden');
-            screenResult.classList.add('hidden');
-            errorContainer.classList.add('hidden');
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewLoading.src = e.target.result;
-                    previewResult.src = e.target.result;
-                    previewResult.parentElement.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                previewLoading.src = '';
-                previewResult.src = '';
-                previewResult.parentElement.style.display = 'none';
-            }
-
-            try {
-                let imgData = { base64: null, mime: null };
-                if (file) {
-                    imgData = await resizeImage(file);
-                    previewResult.src = imgData.preview;
-                }
-
-                const text = inputText.value.trim();
-                const response = await callApi(text, imgData.base64, imgData.mime);
-
-                if (response.error) throw new Error(response.error);
+        <div id="screen-home" class="flex flex-col h-full p-6 fade-in overflow-y-auto">
+            <div class="flex-1 flex flex-col items-center justify-center space-y-10 w-full py-4">
                 
-                resultTitle.innerText = response.title || '生成タイトルなし';
-                resultPost.innerText = response.post || '生成テキストなし';
-                resultHashtags.innerText = (response.hashtags || []).join(' ');
-                resultCta.innerText = response.cta || 'お問い合わせはこちら';
+                <div class="text-center space-y-8 w-full">
+                    <div class="relative inline-block group cursor-pointer" onclick="document.getElementById('camera-input').click()">
+                        <div class="absolute inset-0 rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-700" style="background: var(--accent-color);"></div>
+                        
+                        <div class="relative w-28 h-28 rounded-full border bg-gradient-to-br from-white/5 to-transparent backdrop-blur-md flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-500" style="border-color: var(--accent-color); color: var(--accent-color);">
+                            <i data-lucide="camera" class="w-10 h-10 drop-shadow-md"></i>
+                        </div>
+                        
+                        <div class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-black/80 border text-[9px] font-bold px-3 py-1 rounded-full whitespace-nowrap tracking-wider shadow-lg" style="border-color: var(--accent-color); color: var(--accent-color);">
+                            SMART SCAN
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <h2 class="text-lg font-bold font-head leading-relaxed" style="color: var(--text-main);">
+                            一枚の写真から、<br>
+                            <span class="border-b pb-1" style="color: var(--accent-color); border-color: var(--input-border);">ビジネスの価値</span>を言語化。
+                        </h2>
+                        <p class="text-xs leading-7 font-light" style="color: var(--text-sub);">
+                            視覚情報と文脈を高度に解析。<br>
+                            プロ級のライティングを、あなたの手元に。
+                        </p>
+                    </div>
+                </div>
 
-                screenLoading.classList.add('hidden');
-                screenResult.classList.remove('hidden');
+                <div class="w-full space-y-5">
+                    <div class="relative group">
+                        <textarea id="userText" class="input-dark w-full p-5 rounded-2xl text-sm min-h-[110px] resize-none shadow-inner" placeholder="【解析のヒント】&#13;&#10;例：30代女性向けの隠れ家サロン。&#13;&#10;夜限定の特別コースをアピールしたい。"></textarea>
+                        <div class="absolute top-4 right-4 pointer-events-none group-focus-within:text-accent transition-colors" style="color: var(--text-sub);">
+                            <i data-lucide="pen-tool" class="w-4 h-4"></i>
+                        </div>
+                    </div>
 
-            } catch (err) {
-                console.error(err);
-                screenLoading.classList.add('hidden');
-                screenResult.classList.remove('hidden');
-                document.getElementById('result-container').classList.add('hidden');
-                errorContainer.classList.remove('hidden');
-                errorMessage.innerText = 'システムエラーが発生しました。通信環境をご確認ください。';
-            } finally {
-                fileInput.value = '';
+                    <input type="file" id="camera-input" accept="image/*" class="hidden">
+                    
+                    <button onclick="document.getElementById('camera-input').click()" 
+                        class="btn-premium w-full py-4 rounded-xl flex items-center justify-center gap-3 font-bold text-sm tracking-widest shadow-xl">
+                        <i data-lucide="camera" class="w-5 h-5"></i>
+                        写真を選んで解析開始
+                    </button>
+                    
+                    <button onclick="handleNoImageAnalysis()" 
+                        class="btn-outline w-full py-3.5 rounded-xl flex items-center justify-center gap-2 text-xs font-medium tracking-wide">
+                        <i data-lucide="text-cursor-input" class="w-4 h-4"></i>
+                        テキスト情報のみで生成
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-loading" class="hidden flex flex-col items-center justify-center h-full p-8 gap-12 fade-in absolute inset-0 z-50 backdrop-blur-xl" style="background: var(--bg-glass);">
+            <div class="relative w-64 h-64 rounded-2xl overflow-hidden border shadow-[0_0_50px_rgba(0,0,0,0.2)]" style="border-color: var(--input-border);">
+                <img id="preview-image-loading" class="w-full h-full object-cover opacity-60 grayscale" src="" alt="解析中">
+                <div class="absolute inset-0 bg-gradient-to-t via-transparent to-transparent" style="from: var(--bg-deep);"></div>
+                <div class="scanning-line"></div>
+                
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-20 h-20 border-2 rounded-full flex items-center justify-center animate-[spin_3s_linear_infinite]" style="border-color: var(--input-border); border-top-color: var(--accent-color);">
+                        <div class="w-16 h-16 border-t-2 rounded-full animate-[spin_2s_linear_infinite_reverse]" style="border-color: var(--input-border); border-top-color: var(--accent-color);"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center space-y-3">
+                <h3 class="text-xl font-head font-bold tracking-widest" style="color: var(--text-main);">ANALYZING...</h3>
+                <p class="text-xs font-mono" style="color: var(--text-sub);">文脈を理解し、最適解を導き出しています</p>
+            </div>
+        </div>
+
+        <div id="screen-result" class="hidden flex flex-col h-full fade-in relative z-10">
+            
+            <div class="relative w-full h-60 shrink-0">
+                <img id="preview-image-result" class="w-full h-full object-cover opacity-60" src="" alt="">
+                <div class="absolute inset-0 bg-gradient-to-b via-transparent" style="from: transparent; to: var(--bg-deep);"></div>
+                
+                <button onclick="resetApp()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur text-white/70 flex items-center justify-center hover:bg-black/60 hover:text-white border border-white/10 transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+
+                <div class="absolute bottom-6 left-6 border-l-2 pl-3" style="border-color: var(--accent-color);">
+                    <span class="text-[10px] font-bold tracking-widest uppercase block mb-1" style="color: var(--accent-color);">Generated</span>
+                    <h2 class="font-head font-bold text-2xl tracking-wide text-white">分析完了</h2>
+                </div>
+            </div>
+
+            <div class="flex-1 px-6 pb-10 overflow-y-auto -mt-4 relative backdrop-blur-md rounded-t-3xl border-t shadow-[0_-10px_40px_rgba(0,0,0,0.3)]" style="background: var(--bg-deep); border-color: var(--input-border);">
+                
+                <div id="error-container" class="hidden mb-6 p-4 rounded-xl bg-red-950/50 border border-red-500/20 text-red-200 text-sm mt-6">
+                    <div class="flex items-center gap-2 font-bold mb-1">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i> 生成エラー
+                    </div>
+                    <p id="error-message" class="text-xs opacity-70"></p>
+                </div>
+
+                <div id="result-container" class="space-y-8 mt-8">
+                    <div class="p-7 rounded-3xl relative group border" style="background: var(--bg-pattern-1); border-color: var(--input-border);">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[70px] opacity-10 group-hover:opacity-20 transition-opacity" style="background: var(--accent-color);"></div>
+
+                        <div class="space-y-6 relative z-10">
+                            <div>
+                                <p class="text-[9px] font-bold mb-2 tracking-[0.2em] opacity-80" style="color: var(--accent-color);">CATCH COPY</p>
+                                <h3 id="result-title" class="text-xl font-bold font-head leading-relaxed tracking-wide" style="color: var(--text-main);"></h3>
+                            </div>
+
+                            <div>
+                                <p class="text-[9px] font-bold mb-2 tracking-[0.2em]" style="color: var(--text-sub);">STORY</p>
+                                <div id="result-post" class="text-sm leading-8 font-light whitespace-pre-line tracking-wide" style="color: var(--text-main); opacity: 0.9;"></div>
+                            </div>
+
+                            <div class="pt-5 border-t" style="border-color: var(--input-border);">
+                                <p id="result-hashtags" class="text-xs font-mono leading-relaxed opacity-80 break-words" style="color: var(--accent-color);"></p>
+                            </div>
+
+                            <div class="mt-2 p-4 rounded-lg border-l-2" style="background: var(--bg-pattern-2); border-color: var(--accent-color);">
+                                <p class="text-[9px] mb-1 tracking-widest" style="color: var(--text-sub);">NEXT ACTION</p>
+                                <p id="result-cta" class="text-sm font-bold" style="color: var(--text-main);"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <button onclick="copyAll()" id="btn-copy-all" 
+                            class="btn-premium w-full py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg text-sm font-bold tracking-widest">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            すべてコピー
+                        </button>
+                        
+                        <button onclick="copyTitle()" id="btn-copy-title" 
+                            class="w-full py-2 text-xs hover:opacity-100 transition-colors flex items-center justify-center gap-2 tracking-wide opacity-70" style="color: var(--text-sub);">
+                            <i data-lucide="type" class="w-3 h-3"></i>
+                            タイトルのみコピー
+                        </button>
+
+                        <div class="grid grid-cols-4 gap-3 pt-4 border-t" style="border-color: var(--input-border);">
+                            <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('instagram')">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </button>
+                            <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('facebook')">
+                                <i data-lucide="facebook" class="w-5 h-5"></i>
+                            </button>
+                            <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('twitter')">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            </button>
+                            <button class="icon-btn rounded-xl p-3 flex flex-col items-center gap-1" onclick="openSNS('line')">
+                                <span class="text-xs font-bold">LINE</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-4 text-center z-10 border-t w-full mt-auto backdrop-blur-sm" style="border-color: var(--input-border); background: var(--bg-glass);">
+        <p class="text-[10px] font-medium tracking-[0.2em] uppercase opacity-50" style="color: var(--text-sub);">
+            Premium Edition v6.0 © 2026 SPC
+        </p>
+    </footer>
+
+    <div id="settings-modal" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end sm:justify-center fade-in">
+        <div class="modal-content w-full rounded-t-3xl sm:rounded-3xl sm:w-[90%] sm:mx-auto p-8 shadow-2xl border max-h-[90vh] flex flex-col" style="border-color: var(--input-border);">
+            <div class="flex items-center justify-between mb-8 shrink-0">
+                <h2 class="text-lg font-bold flex items-center gap-2 tracking-wide font-head">
+                    <i data-lucide="sliders-horizontal" class="w-5 h-5" style="color: var(--accent-color);"></i>
+                    システム設定
+                </h2>
+                <button onclick="closeSettings()" class="p-2 -mr-2 opacity-60 hover:opacity-100 transition-colors" style="color: var(--text-main);">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-8 overflow-y-auto pb-6 flex-1">
+                
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest mb-4 opacity-80" style="color: var(--accent-color);">外観モード (Appearance)</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="mode" value="mode-dark" class="mode-radio hidden" onchange="saveSettings()">
+                            <div class="mode-btn p-4 rounded-xl text-center transition-all">
+                                <div class="text-sm mb-1">Dark Mode</div>
+                                <p class="text-[10px] opacity-60">夜間・集中</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="mode" value="mode-light" class="mode-radio hidden" checked onchange="saveSettings()">
+                            <div class="mode-btn p-4 rounded-xl text-center transition-all">
+                                <div class="text-sm mb-1">Light Mode</div>
+                                <p class="text-[10px] opacity-60">昼間・明瞭</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest mb-4 opacity-80" style="color: var(--accent-color);">アクセントカラー (Theme Color)</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="theme" value="theme-black" class="theme-radio hidden" onchange="saveSettings()">
+                            <div class="theme-card p-4 rounded-xl transition-all">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="w-3 h-3 rounded-full bg-[#D4AF37]"></div>
+                                    <div class="text-sm font-bold">Luxury Black</div>
+                                </div>
+                                <p class="text-[10px] opacity-60">圧倒的な高級感</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="theme" value="theme-blue" class="theme-radio hidden" checked onchange="saveSettings()">
+                            <div class="theme-card p-4 rounded-xl transition-all">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="w-3 h-3 rounded-full bg-[#06b6d4]"></div>
+                                    <div class="text-sm font-bold">Tech Blue</div>
+                                </div>
+                                <p class="text-[10px] opacity-60">知的・先進的</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="theme" value="theme-pink" class="theme-radio hidden" onchange="saveSettings()">
+                            <div class="theme-card p-4 rounded-xl transition-all">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="w-3 h-3 rounded-full bg-[#fb7185]"></div>
+                                    <div class="text-sm font-bold">Glamorous Pink</div>
+                                </div>
+                                <p class="text-[10px] opacity-60">華やか・モダン</p>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer relative">
+                            <input type="radio" name="theme" value="theme-orange" class="theme-radio hidden" onchange="saveSettings()">
+                            <div class="theme-card p-4 rounded-xl transition-all">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <div class="w-3 h-3 rounded-full bg-[#f97316]"></div>
+                                    <div class="text-sm font-bold">Vitamin Orange</div>
+                                </div>
+                                <p class="text-[10px] opacity-60">活力・温かみ</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest mb-4 opacity-80" style="color: var(--accent-color);">連携アカウント</h3>
+                    <div class="space-y-4">
+                        <div class="relative">
+                            <i data-lucide="instagram" class="absolute left-3 top-3 w-4 h-4 opacity-50" style="color: var(--text-main);"></i>
+                            <input id="input-insta" type="url" placeholder="Instagram Profile URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
+                        </div>
+                        <div class="relative">
+                            <i data-lucide="facebook" class="absolute left-3 top-3 w-4 h-4 opacity-50" style="color: var(--text-main);"></i>
+                            <input id="input-fb" type="url" placeholder="Facebook Page URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
+                        </div>
+                        <div class="relative">
+                            <svg class="absolute left-3 top-3 w-4 h-4 opacity-50 fill-current" style="color: var(--text-main);" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            <input id="input-x" type="url" placeholder="X (Twitter) URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
+                        </div>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3.5 text-[10px] font-bold opacity-50" style="color: var(--text-main);">LINE</span>
+                            <input id="input-line" type="url" placeholder="LINE Official Account URL" class="input-dark w-full pl-10 p-3 rounded-lg text-xs">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t shrink-0" style="border-color: var(--input-border);">
+                <button onclick="saveAndCloseSettings()" class="btn-premium w-full py-4 rounded-xl text-sm font-bold tracking-widest">
+                    設定を保存する
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="help-modal" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end sm:justify-center fade-in">
+        <div class="modal-content w-full rounded-t-3xl sm:rounded-3xl sm:w-[90%] sm:mx-auto p-8 shadow-2xl border max-h-[85vh] flex flex-col" style="border-color: var(--input-border);">
+            <div class="flex items-center justify-between mb-8 shrink-0">
+                <h2 class="text-lg font-bold flex items-center gap-2 font-head tracking-wide">
+                    <i data-lucide="book-open" class="w-5 h-5" style="color: var(--accent-color);"></i>
+                    活用ガイド
+                </h2>
+                <button onclick="closeHelp()" class="p-2 -mr-2 opacity-60 hover:opacity-100 transition-colors" style="color: var(--text-main);">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-8 overflow-y-auto pb-6 flex-1 text-sm leading-relaxed" style="color: var(--text-sub);">
+                <div class="p-5 rounded-2xl border relative overflow-hidden" style="background: var(--bg-pattern-1); border-color: var(--accent-color);">
+                    <h3 class="font-bold mb-2 tracking-wide flex items-center gap-2" style="color: var(--accent-color);">
+                        <i data-lucide="cpu" class="w-4 h-4"></i>
+                        プロフェッショナル・エンジン
+                    </h3>
+                    <p class="text-xs leading-6">このアプリは高度な言語処理システムを搭載しています。写真の文脈を深く理解し、顧客の感情を動かす「プロ品質の文章」を作成します。</p>
+                </div>
+                
+                <div class="space-y-6">
+                    <h4 class="text-xs font-bold uppercase tracking-widest border-b pb-2" style="color: var(--text-sub); border-color: var(--input-border);">HOW TO USE</h4>
+                    
+                    <div class="flex gap-5">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 border shadow-lg" style="background: var(--bg-deep); color: var(--accent-color); border-color: var(--input-border);">1</div>
+                        <div>
+                            <p class="font-bold mb-1" style="color: var(--text-main);">写真をアップロード</p>
+                            <p class="text-xs">スマホ内の写真を選択するか、その場で撮影してください。</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 border shadow-lg" style="background: var(--bg-deep); color: var(--accent-color); border-color: var(--input-border);">2</div>
+                        <div>
+                            <p class="font-bold mb-1" style="color: var(--text-main);">ヒントを入力（任意）</p>
+                            <p class="text-xs">「誰に伝えたいか」「価格」などを入力すると、精度が劇的に向上します。</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 border shadow-lg" style="background: var(--bg-deep); color: var(--accent-color); border-color: var(--input-border);">3</div>
+                        <div>
+                            <p class="font-bold mb-1" style="color: var(--text-main);">コピー＆ペースト</p>
+                            <p class="text-xs">数秒で生成された文章をコピーし、SNSに貼り付けて完了です。</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl border mt-4" style="background: var(--bg-pattern-2); border-color: var(--input-border);">
+                        <p class="text-xs leading-6">
+                            メモ：この版は Cloudflare Workers の API と連携します。<br>
+                            GitHub Pages 側は静的配信、APIは別ドメインで処理する構成です🙂
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t shrink-0" style="border-color: var(--input-border);">
+                <button onclick="closeHelp()" class="w-full py-4 rounded-xl text-sm font-bold transition-colors tracking-widest" style="background: var(--bg-deep); color: var(--text-sub);">
+                    閉じる
+                </button>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    lucide.createIcons();
+
+    // ここだけ自分のWorkers URLに合わせてください（いまのままでOKなら触らない）
+    const API_URL = "https://flat-smoke-400c.yymmatsu.workers.dev/chat";
+
+    const fileInput = document.getElementById('camera-input');
+    const inputText = document.getElementById('userText');
+    const screenHome = document.getElementById('screen-home');
+    const screenLoading = document.getElementById('screen-loading');
+    const screenResult = document.getElementById('screen-result');
+    const previewLoading = document.getElementById('preview-image-loading');
+    const previewResult = document.getElementById('preview-image-result');
+    
+    const resultTitle = document.getElementById('result-title');
+    const resultPost = document.getElementById('result-post');
+    const resultHashtags = document.getElementById('result-hashtags');
+    const resultCta = document.getElementById('result-cta');
+    const errorContainer = document.getElementById('error-container');
+    const errorMessage = document.getElementById('error-message');
+
+    const settingsModal = document.getElementById('settings-modal');
+    const helpModal = document.getElementById('help-modal');
+    const inputInsta = document.getElementById('input-insta');
+    const inputFb = document.getElementById('input-fb');
+    const inputX = document.getElementById('input-x');
+    const inputLine = document.getElementById('input-line');
+
+    let userSettings = {
+        mode: 'mode-light',
+        theme: 'theme-blue',
+        urls: { instagram: '', facebook: '', twitter: '', line: '' }
+    };
+
+    window.addEventListener('load', () => {
+        const saved = localStorage.getItem('bizCameraSettings_v4');
+        if (saved) {
+            userSettings = JSON.parse(saved);
+        }
+        applySettings();
+    });
+
+    function applySettings() {
+        document.body.className = '';
+        document.body.classList.add(userSettings.mode);
+        document.body.classList.add(userSettings.theme);
+        document.body.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'p-4', 'sm:p-6', 'transition-colors', 'duration-500');
+        lucide.createIcons();
+    }
+
+    function openSettings() {
+        inputInsta.value = userSettings.urls.instagram;
+        inputFb.value = userSettings.urls.facebook;
+        inputX.value = userSettings.urls.twitter;
+        inputLine.value = userSettings.urls.line;
+        
+        const modeRadio = document.querySelector(`input[name="mode"][value="${userSettings.mode}"]`);
+        if(modeRadio) modeRadio.checked = true;
+
+        const themeRadio = document.querySelector(`input[name="theme"][value="${userSettings.theme}"]`);
+        if(themeRadio) themeRadio.checked = true;
+        
+        settingsModal.classList.remove('hidden');
+    }
+
+    function closeSettings() { settingsModal.classList.add('hidden'); }
+
+    function saveAndCloseSettings() {
+        saveSettings();
+        closeSettings();
+    }
+
+    function saveSettings() {
+        userSettings.urls.instagram = inputInsta.value.trim();
+        userSettings.urls.facebook = inputFb.value.trim();
+        userSettings.urls.twitter = inputX.value.trim();
+        userSettings.urls.line = inputLine.value.trim();
+        
+        const checkedMode = document.querySelector('input[name="mode"]:checked');
+        if(checkedMode) userSettings.mode = checkedMode.value;
+
+        const checkedTheme = document.querySelector('input[name="theme"]:checked');
+        if(checkedTheme) userSettings.theme = checkedTheme.value;
+
+        localStorage.setItem('bizCameraSettings_v4', JSON.stringify(userSettings));
+        applySettings();
+    }
+
+    function openHelp() { helpModal.classList.remove('hidden'); }
+    function closeHelp() { helpModal.classList.add('hidden'); }
+
+    function resizeImage(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const max = 1024;
+                    if (width > max) {
+                        height = Math.round(height * max / width);
+                        width = max;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    resolve({
+                        base64: dataUrl.split(',')[1],
+                        mime: 'image/jpeg',
+                        preview: dataUrl
+                    });
+                };
+                img.onerror = reject;
+                img.src = e.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // 保険用（APIが落ちた時に最低限動かす）
+    const mockData = [
+        {
+            title: "【信頼を、形にする技術】",
+            post: "見えない細部にこそ、職人の魂は宿る。\n\n創業から50年、私たちが守り続けてきたのは「妥協なき品質」です。\n一枚の写真では伝えきれない手触りや質感を、ぜひ実物でお確かめください。\n\n貴社のプロジェクトに、確かな価値を。",
+            hashtags: ['#職人技', '#品質管理', '#伝統工芸', '#プロフェッショナル', '#ビジネスパートナー'],
+            cta: "まずは無料相談から"
+        },
+        {
+            title: "【日常に、小さな贅沢を】",
+            post: "忙しい毎日に、ほっと一息つける瞬間を。\n\nこだわりの素材と丁寧な手仕事で仕上げた一品は、\nあなたの心を満たす魔法のスイッチ。\n\n「自分へのご褒美」に、いかがですか？\n明日もまた、頑張れる気がするはず。",
+            hashtags: ['#自分へのご褒美', '#丁寧な暮らし', '#リラックスタイム', '#お気に入り', '#暮らしを楽しむ'],
+            cta: "今すぐチェック"
+        },
+        {
+            title: "【心洗われる、非日常へ】",
+            post: "ただ、そこにいるだけで心が解けていく。\n\n風の音、光の移ろい、木々の香り。\n五感すべてで感じる自然のアートが、\n日々の喧騒を忘れさせてくれます。\n\n次の休日は、少し遠くへ出かけませんか？",
+            hashtags: ['#絶景', '#大人の休日', '#リフレッシュ', '#自然が好き', '#旅の思い出'],
+            cta: "ご予約受付中"
+        },
+        {
+            title: "【本質を、愛でる】",
+            post: "Less is More.\n\n余計な装飾を削ぎ落とすことで見えてくる、\n素材本来の美しさと機能性。\n\n静寂の中に佇む存在感が、\n空間の質を一段階引き上げます。",
+            hashtags: ['#ミニマリズム', '#シンプルライフ', '#デザイン', '#機能美', '#モノトーン'],
+            cta: "詳細を見る"
+        }
+    ];
+
+    function showError(msg) {
+        errorContainer.classList.remove('hidden');
+        errorMessage.innerText = msg;
+    }
+    function hideError() {
+        errorContainer.classList.add('hidden');
+        errorMessage.innerText = '';
+    }
+
+    async function callApi(text, imageBase64, imageMime) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, imageBase64, imageMime }),
+                signal: controller.signal
+            });
+
+            const ct = (res.headers.get('content-type') || '').toLowerCase();
+            let payload = null;
+
+            if (ct.includes('application/json')) {
+                payload = await res.json();
+            } else {
+                const t = await res.text();
+                throw new Error('APIがJSONを返していません。返答: ' + t.slice(0, 120));
             }
+
+            if (!res.ok) {
+                const m = (payload && (payload.error || payload.message)) ? (payload.error || payload.message) : ('HTTP Error: ' + res.status);
+                throw new Error(m);
+            }
+
+            return payload;
+
+        } catch (err) {
+            console.warn('API error (fallback to mock):', err);
+
+            const mock = mockData[Math.floor(Math.random() * mockData.length)];
+            return {
+                title: mock.title,
+                post: mock.post,
+                hashtags: mock.hashtags,
+                cta: mock.cta,
+                _fallback: true,
+                _fallbackReason: err && err.message ? err.message : 'unknown'
+            };
+
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    fileInput.addEventListener('change', async function(e) {
+        if (e.target.files && e.target.files[0]) {
+            await processAnalysis(e.target.files[0]);
+        }
+    });
+
+    async function handleNoImageAnalysis() {
+        await processAnalysis(null);
+    }
+
+    async function processAnalysis(file) {
+        screenHome.classList.add('hidden');
+        screenLoading.classList.remove('hidden');
+        screenResult.classList.add('hidden');
+        hideError();
+        document.getElementById('result-container').classList.remove('hidden');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewLoading.src = e.target.result;
+                previewResult.src = e.target.result;
+                previewResult.parentElement.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewLoading.src = '';
+            previewResult.src = '';
+            previewResult.parentElement.style.display = 'none';
         }
 
-        function resetApp() {
-            inputText.value = '';
+        try {
+            let imgData = { base64: null, mime: null, preview: '' };
+            if (file) {
+                imgData = await resizeImage(file);
+                previewResult.src = imgData.preview;
+            }
+
+            const text = inputText.value.trim();
+            const response = await callApi(text, imgData.base64, imgData.mime);
+
+            if (response && response.error) {
+                throw new Error(response.error);
+            }
+
+            resultTitle.innerText = response.title || '生成タイトルなし';
+            resultPost.innerText = response.post || '生成テキストなし';
+            resultHashtags.innerText = (response.hashtags || []).join(' ');
+            resultCta.innerText = response.cta || 'お問い合わせはこちら';
+
+            screenLoading.classList.add('hidden');
+            screenResult.classList.remove('hidden');
+
+            if (response && response._fallback) {
+                showError('通信が不安定だったため、デモ文章で表示しています🙂　理由：' + (response._fallbackReason || '不明'));
+            }
+
+        } catch (err) {
+            console.error(err);
+            screenLoading.classList.add('hidden');
+            screenResult.classList.remove('hidden');
+            document.getElementById('result-container').classList.add('hidden');
+            showError('システムエラーが発生しました。通信環境とAPI URLをご確認ください。' + '\n' + (err && err.message ? err.message : ''));
+        } finally {
             fileInput.value = '';
-            screenResult.classList.add('hidden');
-            screenHome.classList.remove('hidden');
-            document.getElementById('result-container').classList.remove('hidden');
-            errorContainer.classList.add('hidden');
         }
+    }
 
-        function copyAll() {
-            const btn = document.getElementById('btn-copy-all');
-            const originalContent = btn.innerHTML;
-            const text = `${resultTitle.innerText}\n\n${resultPost.innerText}\n\n${resultHashtags.innerText}\n\n${resultCta.innerText}`;
-            execCopy(text, btn, originalContent);
-        }
+    function resetApp() {
+        inputText.value = '';
+        fileInput.value = '';
+        screenResult.classList.add('hidden');
+        screenHome.classList.remove('hidden');
+        document.getElementById('result-container').classList.remove('hidden');
+        hideError();
+    }
 
-        function copyTitle() {
-            const btn = document.getElementById('btn-copy-title');
-            const originalContent = btn.innerHTML;
-            execCopy(resultTitle.innerText, btn, originalContent);
-        }
+    function copyAll() {
+        const btn = document.getElementById('btn-copy-all');
+        const originalContent = btn.innerHTML;
+        const text = `${resultTitle.innerText}\n\n${resultPost.innerText}\n\n${resultHashtags.innerText}\n\n${resultCta.innerText}`;
+        execCopy(text, btn, originalContent);
+    }
 
-        function execCopy(text, btn, originalContent) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-                document.execCommand('copy');
-                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> コピー完了`;
-                setTimeout(() => {
-                    btn.innerHTML = originalContent;
-                    lucide.createIcons();
-                }, 1500);
-            } catch (err) {
-                console.error(err);
-            }
-            document.body.removeChild(textArea);
-        }
+    function copyTitle() {
+        const btn = document.getElementById('btn-copy-title');
+        const originalContent = btn.innerHTML;
+        execCopy(resultTitle.innerText, btn, originalContent);
+    }
 
-        function openSNS(platform) {
-            const fullText = `${resultTitle.innerText}\n${resultPost.innerText}\n${resultHashtags.innerText}`;
-            const text = encodeURIComponent(fullText);
-            
-            if (userSettings.urls[platform]) {
-                window.open(userSettings.urls[platform], '_blank');
-                return;
-            }
-            
-            let url = '';
-            switch(platform) {
-                case 'twitter': url = `https://twitter.com/intent/tweet?text=${text}`; break;
-                case 'line': url = `https://line.me/R/msg/text/?${text}`; break;
-                case 'instagram': url = 'instagram://app'; break;
-                case 'facebook': url = 'https://www.facebook.com/'; break;
-            }
-            if (url) window.open(url, '_blank');
+    function execCopy(text, btn, originalContent) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> コピー完了`;
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                lucide.createIcons();
+            }, 1500);
+        } catch (err) {
+            console.error(err);
         }
-    </script>
-</body>
-</html>
+        document.body.removeChild(textArea);
+    }
+
+    function openSNS(platform) {
+        const fullText = `${resultTitle.innerText}\n${resultPost.innerText}\n${resultHashtags.innerText}`;
+        const text = encodeURIComponent(fullText);
+        
+        if (userSettings.urls[platform]) {
+            window.open(userSettings.urls[platform], '_blank');
+            return;
+        }
+        
+        let url = '';
+        switch(platform) {
+            case 'twitter': url = `https://twitter.com/intent/tweet?text=${text}`; break;
+            case 'line': url = `https://line.me/R/msg/text/?${text}`; break;
+            case 'instagram': url = 'instagram://app'; break;
+            case 'facebook': url = 'https://www.facebook.com/'; break;
+        }
+        if (url) window.open(url, '_blank');
+    }
+</script>
+
+</body> </html>

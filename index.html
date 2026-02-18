@@ -547,6 +547,7 @@
                             <p class="text-xs">数秒で生成された文章をコピーし、SNSに貼り付けて完了です。</p>
                         </div>
                     </div>
+<<<<<<< HEAD
 
                     <div class="p-4 rounded-xl border mt-4" style="background: var(--bg-pattern-2); border-color: var(--input-border);">
                         <p class="text-xs leading-6">
@@ -554,6 +555,8 @@
                             GitHub Pages 側は静的配信、APIは別ドメインで処理する構成です🙂
                         </p>
                     </div>
+=======
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
                 </div>
             </div>
             <div class="mt-6 pt-6 border-t shrink-0" style="border-color: var(--input-border);">
@@ -569,9 +572,12 @@
 <script>
     lucide.createIcons();
 
+<<<<<<< HEAD
     // ここだけ自分のWorkers URLに合わせてください（いまのままでOKなら触らない）
     const API_URL = "https://flat-smoke-400c.yymmatsu.workers.dev/chat";
 
+=======
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
     const fileInput = document.getElementById('camera-input');
     const inputText = document.getElementById('userText');
     const screenHome = document.getElementById('screen-home');
@@ -690,7 +696,10 @@
         });
     }
 
+<<<<<<< HEAD
     // 保険用（APIが落ちた時に最低限動かす）
+=======
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
     const mockData = [
         {
             title: "【信頼を、形にする技術】",
@@ -718,6 +727,7 @@
         }
     ];
 
+<<<<<<< HEAD
     function showError(msg) {
         errorContainer.classList.remove('hidden');
         errorMessage.innerText = msg;
@@ -733,12 +743,21 @@
 
         try {
             const res = await fetch(API_URL, {
+=======
+    async function callApi(text, imageBase64, imageMime) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 20000);
+        
+        try {
+            const res = await fetch('https://flat-smoke-400c.yymmatsu.workers.dev/chat', {
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ text, imageBase64, imageMime }),
                 signal: controller.signal
             });
 
+<<<<<<< HEAD
             const ct = (res.headers.get('content-type') || '').toLowerCase();
             let payload = null;
 
@@ -759,16 +778,29 @@
         } catch (err) {
             console.warn('API error (fallback to mock):', err);
 
+=======
+            if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+            return await res.json();
+
+        } catch (err) {
+            console.warn('Network issue or demo mode:', err);
+            await new Promise(resolve => setTimeout(resolve, 2500));
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
             const mock = mockData[Math.floor(Math.random() * mockData.length)];
             return {
                 title: mock.title,
                 post: mock.post,
                 hashtags: mock.hashtags,
+<<<<<<< HEAD
                 cta: mock.cta,
                 _fallback: true,
                 _fallbackReason: err && err.message ? err.message : 'unknown'
             };
 
+=======
+                cta: mock.cta
+            };
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
         } finally {
             clearTimeout(timeoutId);
         }
@@ -788,9 +820,14 @@
         screenHome.classList.add('hidden');
         screenLoading.classList.remove('hidden');
         screenResult.classList.add('hidden');
+<<<<<<< HEAD
         hideError();
         document.getElementById('result-container').classList.remove('hidden');
 
+=======
+        errorContainer.classList.add('hidden');
+        
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -806,7 +843,11 @@
         }
 
         try {
+<<<<<<< HEAD
             let imgData = { base64: null, mime: null, preview: '' };
+=======
+            let imgData = { base64: null, mime: null };
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
             if (file) {
                 imgData = await resizeImage(file);
                 previewResult.src = imgData.preview;
@@ -815,10 +856,15 @@
             const text = inputText.value.trim();
             const response = await callApi(text, imgData.base64, imgData.mime);
 
+<<<<<<< HEAD
             if (response && response.error) {
                 throw new Error(response.error);
             }
 
+=======
+            if (response.error) throw new Error(response.error);
+            
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
             resultTitle.innerText = response.title || '生成タイトルなし';
             resultPost.innerText = response.post || '生成テキストなし';
             resultHashtags.innerText = (response.hashtags || []).join(' ');
@@ -827,16 +873,24 @@
             screenLoading.classList.add('hidden');
             screenResult.classList.remove('hidden');
 
+<<<<<<< HEAD
             if (response && response._fallback) {
                 showError('通信が不安定だったため、デモ文章で表示しています🙂　理由：' + (response._fallbackReason || '不明'));
             }
 
+=======
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
         } catch (err) {
             console.error(err);
             screenLoading.classList.add('hidden');
             screenResult.classList.remove('hidden');
             document.getElementById('result-container').classList.add('hidden');
+<<<<<<< HEAD
             showError('システムエラーが発生しました。通信環境とAPI URLをご確認ください。' + '\n' + (err && err.message ? err.message : ''));
+=======
+            errorContainer.classList.remove('hidden');
+            errorMessage.innerText = 'システムエラーが発生しました。通信環境をご確認ください。';
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
         } finally {
             fileInput.value = '';
         }
@@ -848,7 +902,11 @@
         screenResult.classList.add('hidden');
         screenHome.classList.remove('hidden');
         document.getElementById('result-container').classList.remove('hidden');
+<<<<<<< HEAD
         hideError();
+=======
+        errorContainer.classList.add('hidden');
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62
     }
 
     function copyAll() {
@@ -906,4 +964,8 @@
     }
 </script>
 
+<<<<<<< HEAD
 </body> </html>
+=======
+</body> </html>
+>>>>>>> 81930c60196962b60938de20bc1e1f43239f4b62

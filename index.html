@@ -3,13 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>価値みっけ（Cloudflare API連携版）</title>
+    <title>価値みっけ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* === 共通設定 === */
         :root {
-            /* ライトモード共通 */
             --ink: #0f172a;
             --muted: #64748b;
             --card: rgba(255, 255, 255, 0.9);
@@ -23,7 +22,6 @@
         }
 
         :root[data-mode="dark"] {
-            /* ダークモード共通 */
             --ink: #f8fafc;
             --muted: #94a3b8;
             --card: rgba(30, 41, 59, 0.9);
@@ -36,15 +34,13 @@
             --panel-bg: rgba(0, 0, 0, 0.25);
         }
 
-        /* === テーマ別設定 === */
-        
         /* Blue (Sky) */
         :root[data-theme="blue"] {
             --color-main: 14, 165, 233;
             --color-dark: 2, 132, 199;
             --color-light: 125, 211, 252;
         }
-        :root[data-theme="blue"] { /* Default Light */
+        :root[data-theme="blue"] {
             --color-bg1: #eaf7ff;
             --color-bg2: #f7fbff;
             --color-text: #0b77a8;
@@ -63,7 +59,7 @@
             --color-dark: 5, 150, 105;
             --color-light: 110, 231, 183;
         }
-        :root[data-theme="green"] { /* Default Light */
+        :root[data-theme="green"] {
             --color-bg1: #ecfdf5;
             --color-bg2: #f8fafc;
             --color-text: #047857;
@@ -82,7 +78,7 @@
             --color-dark: 234, 88, 12;
             --color-light: 253, 186, 116;
         }
-        :root[data-theme="orange"] { /* Default Light */
+        :root[data-theme="orange"] {
             --color-bg1: #fff7ed;
             --color-bg2: #fffaf5;
             --color-text: #c2410c;
@@ -101,7 +97,7 @@
             --color-dark: 219, 39, 119;
             --color-light: 249, 168, 212;
         }
-        :root[data-theme="pink"] { /* Default Light */
+        :root[data-theme="pink"] {
             --color-bg1: #fdf2f8;
             --color-bg2: #fffcfd;
             --color-text: #be185d;
@@ -114,7 +110,6 @@
             --color-text-light: #ec4899;
         }
 
-        /* === 基本スタイル === */
         body {
             background: radial-gradient(1200px 700px at 50% 10%, var(--color-bg1), var(--color-bg2));
             color: var(--ink);
@@ -134,8 +129,7 @@
             color: rgb(var(--color-main));
             transition: color 0.3s;
         }
-        
-        /* 設定メニュー周り */
+
         .settings-btn {
             color: var(--muted);
             transition: all 0.2s;
@@ -157,7 +151,6 @@
             background: var(--panel-bg);
         }
 
-        /* カラーボタン */
         .color-btn {
             width: 24px;
             height: 24px;
@@ -200,31 +193,31 @@
             position: relative;
             transition: all 0.5s ease;
         }
-        
+
         .scanRing.scanning {
             border-color: rgb(var(--color-main));
             animation: heartbeat 1.2s ease-in-out infinite;
         }
-        
+
         @keyframes heartbeat {
-            0%, 100% { 
-                transform: scale(1); 
+            0%, 100% {
+                transform: scale(1);
                 box-shadow: 0 0 0 10px rgba(var(--color-main), .15), 0 0 20px rgba(var(--color-main), .2);
             }
-            15% { 
-                transform: scale(1.06); 
+            15% {
+                transform: scale(1.06);
                 box-shadow: 0 0 0 15px rgba(var(--color-main), .3), 0 0 40px rgba(var(--color-main), .5);
             }
-            30% { 
-                transform: scale(1); 
+            30% {
+                transform: scale(1);
                 box-shadow: 0 0 0 10px rgba(var(--color-main), .15), 0 0 20px rgba(var(--color-main), .2);
             }
-            45% { 
-                transform: scale(1.06); 
+            45% {
+                transform: scale(1.06);
                 box-shadow: 0 0 0 15px rgba(var(--color-main), .3), 0 0 40px rgba(var(--color-main), .5);
             }
         }
-        
+
         .scanRing::before {
             content: '';
             position: absolute;
@@ -271,11 +264,7 @@
             box-shadow: 0 14px 30px rgba(var(--color-dark), .22);
             transition: transform .06s ease, opacity .2s, background .3s;
         }
-
-        .btnPrimary:active {
-            transform: translateY(1px);
-        }
-        
+        .btnPrimary:active { transform: translateY(1px); }
         .btnPrimary:disabled {
             opacity: 0.7;
             cursor: not-allowed;
@@ -306,7 +295,6 @@
             font-size: 16px;
             line-height: 1.6;
         }
-
         textarea:focus {
             border-color: rgba(var(--color-main), .55);
             box-shadow: 0 0 0 6px rgba(var(--color-main), .12);
@@ -316,7 +304,6 @@
             opacity: 0.6;
         }
 
-        /* 設定メニュー内のインプット用スタイル */
         .setting-input {
             background: var(--input-bg);
             border: 1px solid var(--input-border);
@@ -354,13 +341,12 @@
             overflow: hidden;
             transition: all 0.3s;
         }
-        
+
         .camera-icon-bg {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
         }
 
-        /* 結果表示用のスタイル */
         .result-card {
             background: var(--card);
             border: 1px solid var(--glass-border);
@@ -372,7 +358,6 @@
         .theme-border-l {
             border-left: 4px solid rgb(var(--color-main));
         }
-
         .result-label {
             font-size: 11px;
             font-weight: 700;
@@ -405,7 +390,6 @@
             color: rgb(var(--color-main));
         }
 
-        /* SNSシェアボタンのスタイル */
         .share-btn {
             width: 44px;
             height: 44px;
@@ -422,41 +406,26 @@
             opacity: 0.95;
             box-shadow: 0 6px 14px rgba(0,0,0,0.2);
         }
-        .share-btn:active {
-            transform: translateY(0);
-        }
+        .share-btn:active { transform: translateY(0); }
         .bg-x { background-color: #0f1419; }
         .bg-facebook { background-color: #1877F2; }
         .bg-line { background-color: #06C755; }
         .bg-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-        
-        /* デバッグ用エリア */
-        .debug-area {
-            margin-top: 24px;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 12px;
+
+        /* インラインエラー */
+        .inline-error {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+            font-size: 13px;
+            line-height: 1.5;
         }
-        .debug-summary {
-            font-size: 11px;
-            color: var(--muted);
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .debug-content {
-            margin-top: 8px;
-            background: #1e293b;
-            color: #94a3b8;
-            padding: 12px;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 11px;
-            overflow-x: auto;
-            white-space: pre;
-        }
-        
+        .inline-error.show { display: block; }
+
         .loading-dots:after {
             content: '.';
             animation: dots 1.5s steps(5, end) infinite;
@@ -468,7 +437,6 @@
             80%, 100% { text-shadow: .25em 0 0 var(--ink), .5em 0 0 var(--ink);}
         }
 
-        /* スキャン演出用アニメーション */
         .scan-overlay {
             position: absolute;
             inset: 0;
@@ -477,16 +445,14 @@
             background: rgba(var(--color-main), 0.1);
             display: none;
         }
-        
         .scan-grid {
             position: absolute;
             inset: 0;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(var(--color-main), 0.15) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(var(--color-main), 0.15) 1px, transparent 1px);
             background-size: 20px 20px;
         }
-
         .scan-line {
             position: absolute;
             top: 0;
@@ -497,7 +463,6 @@
             box-shadow: 0 0 10px rgb(var(--color-main)), 0 0 20px rgb(var(--color-main)), 0 0 30px rgb(var(--color-light));
             animation: scanMove 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
-        
         .scan-text {
             position: absolute;
             top: 50%;
@@ -510,42 +475,37 @@
             text-shadow: 0 0 10px rgba(var(--color-main), 0.8);
             animation: pulse 1s ease-in-out infinite;
         }
-        
         @keyframes pulse {
             0%, 100% { opacity: 0.5; }
             50% { opacity: 1; }
         }
-
         @keyframes scanMove {
             0% { top: 0; opacity: 0; }
             5% { opacity: 1; }
             95% { opacity: 1; }
             100% { top: 100%; opacity: 0; }
         }
-
     </style>
 </head>
 <body>
     <main class="min-h-screen flex items-center justify-center p-4 sm:p-6">
         <section class="glass w-full max-w-[540px] rounded-[28px] p-6 sm:p-8">
-            
-            <!-- ヘッダー：PREMIUMバッジ ＆ 設定ボタン -->
-            <div class="flex items-center justify-between mb-4 relative">
-                <div class="chip px-4 py-1.5 rounded-full text-xs font-extrabold tracking-[.18em]">PREMIUM</div>
-                
-                <!-- 設定ボタン（歯車アイコン） -->
+
+            <!-- ヘッダー -->
+            <div class="flex items-center justify-end mb-4 relative">
+                <!-- 設定ボタン -->
                 <button id="settingsBtn" class="settings-btn p-2 rounded-full" title="表示設定">
                     <i data-lucide="settings" class="w-5 h-5"></i>
                 </button>
 
-                <!-- 設定パネル（ポップアップ） -->
+                <!-- 設定パネル -->
                 <div id="settingsPanel" class="hidden absolute right-0 top-10 mt-2 w-[280px] rounded-2xl glass shadow-xl p-4 z-50 max-h-[80vh] overflow-y-auto">
-                    
-                    <!-- モード切替（ライト/ダーク） -->
+
+                    <!-- モード切替 -->
                     <div class="mb-5">
                         <div class="text-[11px] font-bold text-slate-500 mb-2 tracking-wider">アピアランス</div>
                         <div class="flex panel-bg rounded-lg p-1">
-                            <button class="mode-btn active flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-bold" data-mode="light">
+                            <button class="mode-btn flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-bold" data-mode="light">
                                 <i data-lucide="sun" class="w-3.5 h-3.5"></i> ライト
                             </button>
                             <button class="mode-btn flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs font-bold" data-mode="dark">
@@ -553,23 +513,23 @@
                             </button>
                         </div>
                     </div>
-                    
-                    <!-- テーマカラー切替 -->
+
+                    <!-- テーマカラー -->
                     <div class="mb-5">
                         <div class="text-[11px] font-bold text-slate-500 mb-2 tracking-wider">テーマカラー</div>
                         <div class="flex items-center justify-between px-1">
-                            <button class="color-btn c-blue active" data-color="blue" title="ブルー系"></button>
+                            <button class="color-btn c-blue" data-color="blue" title="ブルー系"></button>
                             <button class="color-btn c-green" data-color="green" title="グリーン系"></button>
                             <button class="color-btn c-orange" data-color="orange" title="オレンジ系"></button>
                             <button class="color-btn c-pink" data-color="pink" title="ピンク系"></button>
                         </div>
                     </div>
 
-                    <!-- SNSアカウント設定（自動追記用） -->
+                    <!-- SNSアカウント設定 -->
                     <div class="pt-4 border-t border-slate-200/50">
                         <div class="text-[11px] font-bold text-slate-500 mb-2 tracking-wider">SNSリンク設定（自動追記）</div>
                         <div class="text-[10px] text-slate-400 mb-3 leading-tight">設定しておくと、生成される文章の末尾に自動でアカウント情報が追加されます。</div>
-                        
+
                         <div class="flex flex-col gap-2.5">
                             <div class="flex items-center gap-2">
                                 <i data-lucide="instagram" class="w-4 h-4 text-slate-400"></i>
@@ -587,11 +547,9 @@
                                 <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
                                 <input type="text" id="settingLine" placeholder="LINE公式 URL" class="setting-input w-full text-xs p-1.5 rounded-md focus:outline-none transition-colors">
                             </div>
-                            
                             <button id="saveSettingsBtn" class="mt-2 w-full bg-slate-800 text-white text-xs font-bold py-2 rounded-lg transition-colors">設定を保存</button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -628,15 +586,12 @@
                     <div class="flex items-center justify-between gap-3">
                         <div class="smallNote">
                             写真は任意です。選ぶとプレビューが出ます。
-                            <div class="mono text-[11px] mt-1 opacity-60">API: /chat</div>
                         </div>
                         <div class="flex gap-2">
                             <button id="clearPhotoBtn" type="button" class="btnGhost text-sm">写真を外す</button>
                         </div>
                     </div>
-                    <!-- プレビューエリア -->
                     <div class="mt-3 relative rounded-xl overflow-hidden" id="previewContainer">
-                         <!-- スキャン演出用レイヤー -->
                         <div id="scanOverlay" class="scan-overlay">
                             <div class="scan-grid"></div>
                             <div class="scan-line"></div>
@@ -652,6 +607,8 @@
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
                     <span id="btnText">魅力を言語化する</span>
                 </button>
+                <!-- ① インラインエラー（alertの代替） -->
+                <div id="inputError" class="inline-error"></div>
             </div>
 
             <!-- 結果表示エリア -->
@@ -662,12 +619,10 @@
                         <i data-lucide="copy" class="w-3 h-3"></i> コピー
                     </button>
                 </div>
-                
-                <div id="resultContainer">
-                    <!-- JSでここにコンテンツを挿入 -->
-                </div>
 
-                <!-- SNSシェアボタンエリア（元の場所） -->
+                <div id="resultContainer"></div>
+
+                <!-- SNSシェアボタン -->
                 <div class="mt-6 pt-5 border-t border-slate-200/50">
                     <div class="text-[11px] font-bold text-slate-500 mb-3 text-center tracking-wider">見つけた価値をSNSで発信</div>
                     <div class="flex items-center justify-center gap-4">
@@ -685,16 +640,6 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- デバッグ用：受信データ表示 -->
-                <details class="debug-area">
-                    <summary class="debug-summary">
-                        <i data-lucide="bug" class="w-3 h-3"></i> 受信データ（開発用）
-                    </summary>
-                    <div id="debugContent" class="debug-content">
-                        送信待ち...
-                    </div>
-                </details>
             </div>
 
             <div class="mt-5 smallNote text-center opacity-70">
@@ -704,75 +649,94 @@
     </main>
 
     <script>
-        /* === UI設定パネルの制御 === */
-        const settingsBtn = document.getElementById('settingsBtn');
+        /* ===================================
+           テーマ・モード設定（localStorage保存）
+        =================================== */
+        const root = document.documentElement;
+
+        function applyTheme(theme) {
+            root.setAttribute('data-theme', theme);
+            document.querySelectorAll('.color-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-color') === theme);
+            });
+        }
+
+        function applyMode(mode) {
+            root.setAttribute('data-mode', mode);
+            document.querySelectorAll('.mode-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+            });
+        }
+
+        // ページロード時に復元
+        const savedTheme = localStorage.getItem('kachi_theme') || 'blue';
+        const savedMode  = localStorage.getItem('kachi_mode')  || 'light';
+        applyTheme(savedTheme);
+        applyMode(savedMode);
+
+        // カラーボタン
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const color = btn.getAttribute('data-color');
+                applyTheme(color);
+                localStorage.setItem('kachi_theme', color);
+            });
+        });
+
+        // モードボタン
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.getAttribute('data-mode');
+                applyMode(mode);
+                localStorage.setItem('kachi_mode', mode);
+            });
+        });
+
+        /* ===================================
+           設定パネルの開閉
+        =================================== */
+        const settingsBtn   = document.getElementById('settingsBtn');
         const settingsPanel = document.getElementById('settingsPanel');
 
-        settingsBtn.addEventListener('click', (e) => {
+        settingsBtn.addEventListener('click', e => {
             e.stopPropagation();
             settingsPanel.classList.toggle('hidden');
         });
-
-        settingsPanel.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-
+        settingsPanel.addEventListener('click', e => e.stopPropagation());
         document.addEventListener('click', () => {
             if (!settingsPanel.classList.contains('hidden')) {
                 settingsPanel.classList.add('hidden');
             }
         });
 
-        const modeBtns = document.querySelectorAll('.mode-btn');
-        modeBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const mode = btn.getAttribute('data-mode');
-                document.documentElement.setAttribute('data-mode', mode);
-                
-                modeBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        const themeBtns = document.querySelectorAll('.color-btn');
-        themeBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const color = btn.getAttribute('data-color');
-                document.documentElement.setAttribute('data-theme', color);
-                
-                themeBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        /* === SNS設定の保存と読み込み === */
+        /* ===================================
+           SNS設定の保存と読み込み
+        =================================== */
         const elSettingInsta = document.getElementById("settingInsta");
-        const elSettingX = document.getElementById("settingX");
-        const elSettingFb = document.getElementById("settingFb");
-        const elSettingLine = document.getElementById("settingLine");
+        const elSettingX     = document.getElementById("settingX");
+        const elSettingFb    = document.getElementById("settingFb");
+        const elSettingLine  = document.getElementById("settingLine");
         const saveSettingsBtn = document.getElementById("saveSettingsBtn");
 
-        // ロード
         try {
             elSettingInsta.value = localStorage.getItem("sns_insta") || "";
-            elSettingX.value = localStorage.getItem("sns_x") || "";
-            elSettingFb.value = localStorage.getItem("sns_fb") || "";
-            elSettingLine.value = localStorage.getItem("sns_line") || "";
+            elSettingX.value     = localStorage.getItem("sns_x")     || "";
+            elSettingFb.value    = localStorage.getItem("sns_fb")    || "";
+            elSettingLine.value  = localStorage.getItem("sns_line")  || "";
         } catch(e) {}
 
-        // 保存
         saveSettingsBtn.addEventListener("click", () => {
             try {
                 localStorage.setItem("sns_insta", elSettingInsta.value.trim());
-                localStorage.setItem("sns_x", elSettingX.value.trim());
-                localStorage.setItem("sns_fb", elSettingFb.value.trim());
-                localStorage.setItem("sns_line", elSettingLine.value.trim());
-                
-                const originalText = saveSettingsBtn.textContent;
+                localStorage.setItem("sns_x",     elSettingX.value.trim());
+                localStorage.setItem("sns_fb",    elSettingFb.value.trim());
+                localStorage.setItem("sns_line",  elSettingLine.value.trim());
+
+                const orig = saveSettingsBtn.textContent;
                 saveSettingsBtn.textContent = "保存しました！";
                 saveSettingsBtn.classList.replace("bg-slate-800", "bg-emerald-600");
                 setTimeout(() => {
-                    saveSettingsBtn.textContent = originalText;
+                    saveSettingsBtn.textContent = orig;
                     saveSettingsBtn.classList.replace("bg-emerald-600", "bg-slate-800");
                 }, 2000);
             } catch(e) {
@@ -780,48 +744,69 @@
             }
         });
 
-        /* === API連携とメイン処理 === */
+        /* ===================================
+           API連携とメイン処理
+        =================================== */
         const API_URL = "https://kachi-mikke-spc.yymmatsu.workers.dev/chat";
 
-        const elHint = document.getElementById("hint");
-        const elFile = document.getElementById("file");
-        const elPreview = document.getElementById("preview");
-        const elResultArea = document.getElementById("resultArea");
+        const elHint           = document.getElementById("hint");
+        const elFile           = document.getElementById("file");
+        const elPreview        = document.getElementById("preview");
+        const elResultArea     = document.getElementById("resultArea");
         const elResultContainer = document.getElementById("resultContainer");
-        const elSendBtn = document.getElementById("sendBtn");
-        const elBtnText = document.getElementById("btnText");
-        const elCopyBtn = document.getElementById("copyBtn");
-        const elDebugContent = document.getElementById("debugContent");
-        const elScanOverlay = document.getElementById("scanOverlay");
-        const elMainRing = document.getElementById("mainRing");
+        const elSendBtn        = document.getElementById("sendBtn");
+        const elBtnText        = document.getElementById("btnText");
+        const elCopyBtn        = document.getElementById("copyBtn");
+        const elScanOverlay    = document.getElementById("scanOverlay");
+        const elMainRing       = document.getElementById("mainRing");
+        const elInputError     = document.getElementById("inputError");
 
         let imageBase64 = "";
         let generatedTextForCopy = "";
 
-        function toBase64(file) {
+        /* ② 画像リサイズ処理（長辺1024px・JPEG 0.85） */
+        function resizeAndToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = () => resolve(String(reader.result || ""));
                 reader.onerror = reject;
+                reader.onload = () => {
+                    const img = new Image();
+                    img.onerror = reject;
+                    img.onload = () => {
+                        const MAX = 1024;
+                        let { width, height } = img;
+                        if (width > MAX || height > MAX) {
+                            if (width > height) {
+                                height = Math.round(height * MAX / width);
+                                width = MAX;
+                            } else {
+                                width = Math.round(width * MAX / height);
+                                height = MAX;
+                            }
+                        }
+                        const canvas = document.createElement('canvas');
+                        canvas.width  = width;
+                        canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.85));
+                    };
+                    img.src = String(reader.result || "");
+                };
                 reader.readAsDataURL(file);
             });
         }
 
-        document.getElementById("cameraBtn").addEventListener("click", () => {
-            elFile.click();
-        });
+        document.getElementById("cameraBtn").addEventListener("click", () => elFile.click());
 
         elFile.addEventListener("change", async () => {
             const file = elFile.files && elFile.files[0];
-            if (!file) {
-                return;
-            }
+            if (!file) return;
             try {
-                const dataUrl = await toBase64(file);
+                const dataUrl = await resizeAndToBase64(file);
                 imageBase64 = dataUrl;
                 elPreview.src = dataUrl;
                 elPreview.classList.remove("hidden");
-            } catch (e) {
+            } catch(e) {
                 imageBase64 = "";
                 elPreview.classList.add("hidden");
                 alert("画像の読み込みに失敗しました。");
@@ -835,196 +820,175 @@
             elPreview.classList.add("hidden");
         });
 
-        // コピー機能（汎用）
+        /* インラインエラー表示ヘルパー */
+        function showInputError(msg) {
+            elInputError.textContent = msg;
+            elInputError.classList.add('show');
+        }
+        function hideInputError() {
+            elInputError.classList.remove('show');
+            elInputError.textContent = '';
+        }
+
+        /* コピー機能 */
         function executeCopy(text, successMessage, successCallback) {
             const fallbackCopy = () => {
                 const ta = document.createElement('textarea');
                 ta.value = text;
-                // textareaが画面に見えないようにスタイルを設定
-                ta.style.position = 'fixed';
-                ta.style.top = '0';
-                ta.style.left = '0';
-                ta.style.opacity = '0';
+                ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
                 document.body.appendChild(ta);
                 ta.select();
                 try {
                     document.execCommand('copy');
                     if (successMessage) alert(successMessage);
                     if (successCallback) successCallback();
-                } catch (err) {
-                    console.error('Fallback copy failed', err);
-                }
+                } catch(err) { console.error('Fallback copy failed', err); }
                 document.body.removeChild(ta);
             };
 
-            // Clipboard APIが使えるか確認し、権限エラーなどの場合はフォールバック
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(() => {
                     if (successMessage) alert(successMessage);
                     if (successCallback) successCallback();
-                }).catch(err => {
-                    fallbackCopy();
-                });
+                }).catch(() => fallbackCopy());
             } else {
                 fallbackCopy();
             }
         }
 
-        // コピーボタンの動作
         elCopyBtn.addEventListener("click", () => {
-            if(!generatedTextForCopy) return;
-            
+            if (!generatedTextForCopy) return;
             executeCopy(generatedTextForCopy, "", () => {
-                const originalHTML = elCopyBtn.innerHTML;
+                const orig = elCopyBtn.innerHTML;
                 elCopyBtn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> コピー完了';
                 elCopyBtn.style.background = 'rgba(34, 197, 94, 0.1)';
                 elCopyBtn.style.color = '#15803d';
                 setTimeout(() => {
-                    elCopyBtn.innerHTML = originalHTML;
+                    elCopyBtn.innerHTML = orig;
                     elCopyBtn.style.background = '';
                     elCopyBtn.style.color = '';
-                    if(window.lucide) window.lucide.createIcons();
+                    if (window.lucide) window.lucide.createIcons();
                 }, 2000);
             });
         });
 
-        /* === SNSシェアボタンの動作 === */
-        document.getElementById("shareX").addEventListener("click", () => {
-            if(!generatedTextForCopy) {
-                alert("先に「魅力を言語化する」を実行してください。");
+        /* ===================================
+           SNSシェアボタン
+        =================================== */
+        function requireGenerated(cb) {
+            if (!generatedTextForCopy) {
+                showInputError("先に「魅力を言語化する」を実行してください。");
                 return;
             }
-            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(generatedTextForCopy)}`;
-            window.open(url, '_blank');
+            cb();
+        }
+
+        document.getElementById("shareX").addEventListener("click", () => {
+            requireGenerated(() => {
+                // ③ X用：本文のみ取り出して280文字に収める
+                const bodyOnly = generatedTextForCopy.split(/\n\n#/)[0].trim();
+                const tweet = bodyOnly.length > 277 ? bodyOnly.slice(0, 277) + "…" : bodyOnly;
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`, '_blank');
+            });
         });
 
         document.getElementById("shareLine").addEventListener("click", () => {
-            if(!generatedTextForCopy) {
-                alert("先に「魅力を言語化する」を実行してください。");
-                return;
-            }
-            const url = `https://line.me/R/msg/text/?${encodeURIComponent(generatedTextForCopy)}`;
-            window.open(url, '_blank');
+            requireGenerated(() => {
+                window.open(`https://line.me/R/msg/text/?${encodeURIComponent(generatedTextForCopy)}`, '_blank');
+            });
         });
 
         document.getElementById("shareInstagram").addEventListener("click", () => {
-            if(!generatedTextForCopy) {
-                alert("先に「魅力を言語化する」を実行してください。");
-                return;
-            }
-            // Instagramはテキスト渡しができないためコピーして促す
-            executeCopy(generatedTextForCopy, "文章をコピーしました！\nInstagramアプリを開いてペーストしてください。");
-            window.open('https://www.instagram.com/', '_blank');
+            requireGenerated(() => {
+                executeCopy(generatedTextForCopy, "文章をコピーしました！\nInstagramアプリを開いてペーストしてください。");
+                window.open('https://www.instagram.com/', '_blank');
+            });
         });
 
         document.getElementById("shareFacebook").addEventListener("click", () => {
-            if(!generatedTextForCopy) {
-                alert("先に「魅力を言語化する」を実行してください。");
-                return;
-            }
-            // Facebookもテキストのみ渡しが難しいためコピーして促す
-            executeCopy(generatedTextForCopy, "文章をコピーしました！\nFacebookの投稿画面を開いてペーストしてください。");
-            window.open('https://www.facebook.com/', '_blank');
+            requireGenerated(() => {
+                executeCopy(generatedTextForCopy, "文章をコピーしました！\nFacebookの投稿画面を開いてペーストしてください。");
+                window.open('https://www.facebook.com/', '_blank');
+            });
         });
 
-
+        /* ===================================
+           送信メイン処理
+        =================================== */
         document.getElementById("sendBtn").addEventListener("click", async () => {
             const text = (elHint.value || "").trim();
+
+            // ① インラインバリデーション
             if (!text && !imageBase64) {
-                alert("ヒントか写真、どちらかを入れてください。");
+                showInputError("ヒントか写真、どちらかを入れてください。");
                 return;
             }
+            hideInputError();
 
             elSendBtn.disabled = true;
             elBtnText.textContent = "解析中";
             elBtnText.classList.add("loading-dots");
             elResultArea.classList.add("hidden");
-            elDebugContent.textContent = "送信中...";
-            
-            elMainRing.classList.add("scanning");
-            if(imageBase64) {
-                elScanOverlay.style.display = "block";
-            }
 
-            const payload = {
-                text: text,
-                imageBase64: imageBase64
-            };
+            elMainRing.classList.add("scanning");
+            if (imageBase64) elScanOverlay.style.display = "block";
+
+            const payload = { text, imageBase64 };
 
             try {
                 const res = await fetch(API_URL, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
                 });
 
-                const status = res.status;
                 let rawText = "";
                 let data = {};
-
-                // まずはレスポンスをテキストとして取得
                 try {
                     rawText = await res.text();
                     data = JSON.parse(rawText);
-                } catch (e) {
-                    // JSONパースに失敗した場合（テキストとして扱う）
-                    data = {};
-                }
-                
-                // エラー時の処理（ステータスが200番台以外）
+                } catch(e) { data = {}; }
+
                 if (!res.ok) {
-                    elDebugContent.textContent = `Status: ${status}\nResponse:\n${rawText || "空のレスポンス"}`;
-                    renderError(`サーバーエラーが発生しました (ステータス: ${status})\n\n※画面下の「受信データ（開発用）」を開いて詳細をご確認ください。`);
+                    renderError(`サーバーエラーが発生しました (${res.status})\nしばらく待ってから再度お試しください。`);
                     return;
                 }
 
-                // 成功時、デバッグ用に生データを表示
-                elDebugContent.textContent = rawText;
-
-                // JSONパースに失敗したが、プレーンテキストが返ってきている場合
                 if (Object.keys(data).length === 0 && rawText) {
                     renderSimpleResult(rawText);
                     return;
                 }
 
-                // 通常の構造化データ表示
                 renderStructuredResult(data);
 
-            } catch (e) {
-                elDebugContent.textContent = "Error:\n" + String(e);
+            } catch(e) {
                 renderError("通信エラーが発生しました。\nネットワーク接続を確認してください。");
             } finally {
                 elSendBtn.disabled = false;
                 elBtnText.textContent = "魅力を言語化する";
                 elBtnText.classList.remove("loading-dots");
-                
                 elScanOverlay.style.display = "none";
                 elMainRing.classList.remove("scanning");
-                
                 if (window.lucide) window.lucide.createIcons();
             }
         });
-        
+
         function renderSimpleResult(text) {
             generatedTextForCopy = text;
             elResultContainer.innerHTML = `
                 <div class="result-card">
                     <span class="result-label">投稿テキスト</span>
                     <div class="result-content">${escapeHtml(text)}</div>
-                </div>
-            `;
+                </div>`;
             elResultArea.classList.remove("hidden");
             if (window.lucide) window.lucide.createIcons();
         }
-        
+
         function renderError(msg) {
             elResultContainer.innerHTML = `
                 <div class="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm">
                     ${escapeHtml(msg)}
-                </div>
-            `;
+                </div>`;
             elResultArea.classList.remove("hidden");
             if (window.lucide) window.lucide.createIcons();
         }
@@ -1037,55 +1001,48 @@
             }
 
             if (!data.title && !data.post && Object.keys(data).length === 0) {
-                 renderError("空の応答が返ってきました。");
-                 return;
+                renderError("空の応答が返ってきました。");
+                return;
             }
-            
             if (!data.title && !data.post) {
                 renderSimpleResult(JSON.stringify(data, null, 2));
                 return;
             }
 
-            const title = data.title || "";
-            const post = data.post || "";
+            const title    = data.title || "";
+            const post     = data.post  || "";
             const hashtags = Array.isArray(data.hashtags) ? data.hashtags.join(" ") : (data.hashtags || "");
-            const cta = data.cta || "";
+            const cta      = data.cta   || "";
 
-            // 本文、CTA、ハッシュタグを1つにまとめる
             let combinedPost = post;
-            if(cta) combinedPost += `\n\n${cta}`;
-            if(hashtags) combinedPost += `\n\n${hashtags}`;
+            if (cta)      combinedPost += `\n\n${cta}`;
+            if (hashtags) combinedPost += `\n\n${hashtags}`;
 
-            // --- SNSシグネチャ（自動追記）の組み立て ---
             let snsSignature = "";
             const insta = elSettingInsta.value.trim();
-            const xId = elSettingX.value.trim();
-            const fb = elSettingFb.value.trim();
-            const line = elSettingLine.value.trim();
-            
-            if(insta || xId || fb || line) {
-                snsSignature += "\n\n---\n";
-                if(insta) snsSignature += `Instagram: ${insta}\n`;
-                if(xId) snsSignature += `X: ${xId}\n`;
-                if(fb) snsSignature += `Facebook: ${fb}\n`;
-                if(line) snsSignature += `LINE: ${line}\n`;
-            }
-            // ----------------------------------------
+            const xId   = elSettingX.value.trim();
+            const fb    = elSettingFb.value.trim();
+            const line  = elSettingLine.value.trim();
 
-            // コピー用にもタイトル、まとめた本文、SNSシグネチャをセット
+            if (insta || xId || fb || line) {
+                snsSignature += "\n\n---\n";
+                if (insta) snsSignature += `Instagram: ${insta}\n`;
+                if (xId)   snsSignature += `X: ${xId}\n`;
+                if (fb)    snsSignature += `Facebook: ${fb}\n`;
+                if (line)  snsSignature += `LINE: ${line}\n`;
+            }
+
             generatedTextForCopy = `${title ? title + '\n\n' : ''}${combinedPost}${snsSignature}`.trim();
 
             let html = "";
-
-            if(title) {
+            if (title) {
                 html += `
                 <div class="result-card theme-border-l mb-3">
                     <span class="result-label">タイトル案</span>
                     <div class="result-content font-bold text-lg">${escapeHtml(title)}</div>
                 </div>`;
             }
-
-            if(combinedPost || snsSignature) {
+            if (combinedPost || snsSignature) {
                 html += `
                 <div class="result-card">
                     <span class="result-label">投稿テキスト（コピーして使えます）</span>
@@ -1095,13 +1052,12 @@
 
             elResultContainer.innerHTML = html;
             elResultArea.classList.remove("hidden");
-            
             elResultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
             if (window.lucide) window.lucide.createIcons();
         }
-        
+
         function escapeHtml(str) {
-            if(!str) return "";
+            if (!str) return "";
             return str
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -1114,7 +1070,7 @@
             if (window.lucide && typeof window.lucide.createIcons === "function") {
                 window.lucide.createIcons();
             }
-        } catch (e) {}
+        } catch(e) {}
     </script>
 </body>
 </html>

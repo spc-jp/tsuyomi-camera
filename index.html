@@ -47,6 +47,39 @@
             background: radial-gradient(circle at 50% 45%, rgba(127, 216, 255, .25), rgba(255, 255, 255, 0));
             box-shadow: 0 0 0 10px rgba(127, 216, 255, .07);
             position: relative;
+            transition: all 0.5s ease;
+        }
+        
+        /* リング回転アニメーション */
+        .scanRing.scanning {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 10px rgba(56, 189, 248, .15), 0 0 30px rgba(56, 189, 248, .3);
+            animation: ringSpin 3s linear infinite;
+        }
+        
+        @keyframes ringSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 回転しても中のボタンは回らないように逆回転させるコンテナが必要ですが、
+           今回はシンプルにscanRing自体を回すのではなく、疑似要素で回転を表現します */
+        .scanRing::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px dashed rgba(14, 165, 233, 0);
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+        .scanRing.scanning::before {
+            border-color: rgba(14, 165, 233, 0.6);
+            animation: dashSpin 10s linear infinite;
+        }
+        @keyframes dashSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .scanBtn {
@@ -64,6 +97,7 @@
             letter-spacing: .08em;
             box-shadow: 0 10px 25px rgba(2, 132, 199, .18);
             white-space: nowrap;
+            z-index: 10; /* 回転の影響を受けないよう前面へ */
         }
 
         .btnPrimary {
@@ -135,6 +169,8 @@
             border: 1px dashed rgba(15, 23, 42, .15);
             background: rgba(255, 255, 255, .55);
             padding: 10px;
+            position: relative; /* スキャン演出のために追加 */
+            overflow: hidden;   /* スキャン線がはみ出さないように */
         }
 
         /* 結果表示用のスタイル追加 */
@@ -175,6 +211,34 @@
             background: rgba(14, 165, 233, 0.2);
         }
         
+        /* デバッグ用エリアのスタイル */
+        .debug-area {
+            margin-top: 24px;
+            border-top: 1px solid rgba(15,23,42,0.1);
+            padding-top: 12px;
+        }
+        .debug-summary {
+            font-size: 11px;
+            color: var(--muted);
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .debug-content {
+            margin-top: 8px;
+            background: #1e293b;
+            color: #94a3b8;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        
+        /* ローディング文字のアニメーション */
         .loading-dots:after {
             content: '.';
             animation: dots 1.5s steps(5, end) infinite;
@@ -184,6 +248,63 @@
             40% { color: white; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0);}
             60% { text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,0);}
             80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white;}
+        }
+
+        /* スキャン演出用アニメーション（強化版） */
+        .scan-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            pointer-events: none;
+            background: rgba(14, 165, 233, 0.1);
+            display: none; /* JSで制御 */
+        }
+        
+        /* グリッド背景（ハイテク感） */
+        .scan-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.15) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px; /* 少し太く */
+            background: #38bdf8;
+            box-shadow: 0 0 10px #0ea5e9, 0 0 20px #38bdf8, 0 0 30px #bae6fd;
+            animation: scanMove 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        
+        /* ANALYZINGテキスト */
+        .scan-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #bae6fd;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.8);
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes scanMove {
+            0% { top: 0; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
         }
 
     </style>
@@ -198,8 +319,8 @@
             <div class="text-center text-[11px] tracking-[.35em] text-slate-500 mt-2">VISUAL VALUE FINDER</div>
 
             <div class="mt-6 flex items-center justify-center">
-                <div class="scanRing">
-                    <button id="cameraBtn" class="absolute inset-0 flex items-center justify-center rounded-full" type="button" title="写真を選ぶ">
+                <div class="scanRing" id="mainRing">
+                    <button id="cameraBtn" class="absolute inset-0 flex items-center justify-center rounded-full" type="button" title="写真を選ぶ" style="z-index: 20;">
                         <div class="flex flex-col items-center justify-center gap-2">
                             <div class="w-12 h-12 rounded-2xl bg-white/75 border border-slate-200 flex items-center justify-center shadow">
                                 <i data-lucide="camera" class="w-7 h-7 text-sky-600"></i>
@@ -233,13 +354,19 @@
                             <button id="clearPhotoBtn" type="button" class="btnGhost text-sm">写真を外す</button>
                         </div>
                     </div>
-                    <div class="mt-3">
-                        <img id="preview" alt="" class="w-full rounded-xl hidden" />
+                    <!-- プレビューエリア -->
+                    <div class="mt-3 relative rounded-xl overflow-hidden" id="previewContainer">
+                         <!-- スキャン演出用レイヤー -->
+                        <div id="scanOverlay" class="scan-overlay">
+                            <div class="scan-grid"></div>
+                            <div class="scan-line"></div>
+                            <div class="scan-text">ANALYZING...</div>
+                        </div>
+                        <img id="preview" alt="" class="w-full hidden" />
                     </div>
                 </div>
             </div>
 
-            <!-- ボタンエリア：接続テスト削除、送信ボタンのみに -->
             <div class="mt-4">
                 <button id="sendBtn" type="button" class="btnPrimary w-full flex justify-center items-center">
                     <span id="btnText">送信して生成</span>
@@ -257,6 +384,16 @@
                 <div id="resultContainer">
                     <!-- JSでここにコンテンツを挿入 -->
                 </div>
+
+                <!-- デバッグ用：受信データ表示 -->
+                <details class="debug-area">
+                    <summary class="debug-summary">
+                        <i data-lucide="bug" class="w-3 h-3"></i> 受信データ（開発用）
+                    </summary>
+                    <div id="debugContent" class="debug-content">
+                        送信待ち...
+                    </div>
+                </details>
             </div>
 
             <div class="mt-4 smallNote text-center opacity-60">
@@ -277,6 +414,9 @@
         const elSendBtn = document.getElementById("sendBtn");
         const elBtnText = document.getElementById("btnText");
         const elCopyBtn = document.getElementById("copyBtn");
+        const elDebugContent = document.getElementById("debugContent");
+        const elScanOverlay = document.getElementById("scanOverlay");
+        const elMainRing = document.getElementById("mainRing"); // 上部のリング
 
         let imageBase64 = "";
         let generatedTextForCopy = ""; // コピー用に保持するテキスト
@@ -355,9 +495,16 @@
 
             // ローディング状態にする
             elSendBtn.disabled = true;
-            elBtnText.textContent = "考え中";
+            elBtnText.textContent = "解析中";
             elBtnText.classList.add("loading-dots");
             elResultArea.classList.add("hidden");
+            elDebugContent.textContent = "送信中..."; // デバッグリセット
+            
+            // スキャン演出開始
+            elMainRing.classList.add("scanning"); // 上部リング回転
+            if(imageBase64) {
+                elScanOverlay.style.display = "block"; // 写真スキャン
+            }
 
             const payload = {
                 text: text,
@@ -380,12 +527,17 @@
                     try {
                         const rawText = await res.text();
                          if(rawText){
+                             // 生テキストが返ってきた場合
+                             elDebugContent.textContent = "Raw Text:\n" + rawText;
                              renderSimpleResult(rawText);
                              return;
                          }
                     } catch(e2) {}
                     data = {};
                 }
+                
+                // 【デバッグ】受信したJSONをそのまま表示
+                elDebugContent.textContent = JSON.stringify(data, null, 2);
 
                 if (!res.ok) {
                     renderError("サーバーエラーが発生しました: " + res.status);
@@ -396,12 +548,19 @@
                 renderStructuredResult(data);
 
             } catch (e) {
+                elDebugContent.textContent = "Error:\n" + String(e);
                 renderError("通信エラーが発生しました😢\n" + String(e));
             } finally {
                 // ボタンを元に戻す
                 elSendBtn.disabled = false;
                 elBtnText.textContent = "送信して生成";
                 elBtnText.classList.remove("loading-dots");
+                
+                // スキャン演出停止
+                elScanOverlay.style.display = "none";
+                elMainRing.classList.remove("scanning");
+                
+                if (window.lucide) window.lucide.createIcons();
             }
         });
         
@@ -425,6 +584,7 @@
                 </div>
             `;
             elResultArea.classList.remove("hidden");
+            if (window.lucide) window.lucide.createIcons();
         }
 
         // 構造化データの表示（メイン機能）
@@ -496,6 +656,7 @@
             
             // スクロールして結果を見せる
             elResultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (window.lucide) window.lucide.createIcons();
         }
         
         function escapeHtml(str) {

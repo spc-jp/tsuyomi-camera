@@ -203,13 +203,26 @@
         
         .scanRing.scanning {
             border-color: rgb(var(--color-main));
-            box-shadow: 0 0 0 10px rgba(var(--color-main), .15), 0 0 30px rgba(var(--color-main), .3);
-            animation: ringSpin 3s linear infinite;
+            animation: heartbeat 1.2s ease-in-out infinite;
         }
         
-        @keyframes ringSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes heartbeat {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 10px rgba(var(--color-main), .15), 0 0 20px rgba(var(--color-main), .2);
+            }
+            15% { 
+                transform: scale(1.06); 
+                box-shadow: 0 0 0 15px rgba(var(--color-main), .3), 0 0 40px rgba(var(--color-main), .5);
+            }
+            30% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 10px rgba(var(--color-main), .15), 0 0 20px rgba(var(--color-main), .2);
+            }
+            45% { 
+                transform: scale(1.06); 
+                box-shadow: 0 0 0 15px rgba(var(--color-main), .3), 0 0 40px rgba(var(--color-main), .5);
+            }
         }
         
         .scanRing::before {
@@ -217,17 +230,17 @@
             position: absolute;
             inset: -4px;
             border-radius: 50%;
-            border: 2px dashed rgba(var(--color-main), 0);
+            border: 2px solid rgba(var(--color-main), 0);
             pointer-events: none;
             transition: all 0.3s;
         }
         .scanRing.scanning::before {
             border-color: rgba(var(--color-main), 0.6);
-            animation: dashSpin 10s linear infinite;
+            animation: ripple 1.2s ease-out infinite;
         }
-        @keyframes dashSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.3); opacity: 0; }
         }
 
         .scanBtn {
@@ -303,6 +316,16 @@
             opacity: 0.6;
         }
 
+        /* 設定メニュー内のインプット用スタイル */
+        .setting-input {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--ink);
+        }
+        .setting-input:focus {
+            border-color: rgb(var(--color-main));
+        }
+
         .mono {
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
@@ -349,23 +372,13 @@
         .theme-border-l {
             border-left: 4px solid rgb(var(--color-main));
         }
-        .theme-bg-light {
-            background: rgba(var(--color-main), 0.08);
-            border-color: rgba(var(--color-main), 0.15);
-        }
-        .theme-tag-bg {
-            background: var(--panel-bg);
-            border-color: var(--glass-border);
-        }
-        .theme-text { color: var(--color-text); }
-        .theme-text-dark { color: rgb(var(--color-main)); }
 
         .result-label {
             font-size: 11px;
             font-weight: 700;
             color: var(--muted);
             letter-spacing: 0.1em;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             display: block;
         }
         .result-content {
@@ -391,6 +404,31 @@
             background: rgba(var(--color-main), 0.2);
             color: rgb(var(--color-main));
         }
+
+        /* SNSシェアボタンのスタイル */
+        .share-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .share-btn:hover {
+            transform: translateY(-3px);
+            opacity: 0.95;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        .share-btn:active {
+            transform: translateY(0);
+        }
+        .bg-x { background-color: #0f1419; }
+        .bg-facebook { background-color: #1877F2; }
+        .bg-line { background-color: #06C755; }
+        .bg-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
         
         /* デバッグ用エリア */
         .debug-area {
@@ -501,7 +539,7 @@
                 </button>
 
                 <!-- 設定パネル（ポップアップ） -->
-                <div id="settingsPanel" class="hidden absolute right-0 top-10 mt-2 w-[220px] rounded-2xl glass shadow-xl p-4 z-50">
+                <div id="settingsPanel" class="hidden absolute right-0 top-10 mt-2 w-[280px] rounded-2xl glass shadow-xl p-4 z-50 max-h-[80vh] overflow-y-auto">
                     
                     <!-- モード切替（ライト/ダーク） -->
                     <div class="mb-5">
@@ -517,7 +555,7 @@
                     </div>
                     
                     <!-- テーマカラー切替 -->
-                    <div>
+                    <div class="mb-5">
                         <div class="text-[11px] font-bold text-slate-500 mb-2 tracking-wider">テーマカラー</div>
                         <div class="flex items-center justify-between px-1">
                             <button class="color-btn c-blue active" data-color="blue" title="ブルー系"></button>
@@ -526,6 +564,34 @@
                             <button class="color-btn c-pink" data-color="pink" title="ピンク系"></button>
                         </div>
                     </div>
+
+                    <!-- SNSアカウント設定（自動追記用） -->
+                    <div class="pt-4 border-t border-slate-200/50">
+                        <div class="text-[11px] font-bold text-slate-500 mb-2 tracking-wider">SNSリンク設定（自動追記）</div>
+                        <div class="text-[10px] text-slate-400 mb-3 leading-tight">設定しておくと、生成される文章の末尾に自動でアカウント情報が追加されます。</div>
+                        
+                        <div class="flex flex-col gap-2.5">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="instagram" class="w-4 h-4 text-slate-400"></i>
+                                <input type="text" id="settingInsta" placeholder="ID (例: @shop)" class="setting-input w-full text-xs p-1.5 rounded-md focus:outline-none transition-colors">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="twitter" class="w-4 h-4 text-slate-400"></i>
+                                <input type="text" id="settingX" placeholder="ID (例: @shop)" class="setting-input w-full text-xs p-1.5 rounded-md focus:outline-none transition-colors">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="facebook" class="w-4 h-4 text-slate-400"></i>
+                                <input type="text" id="settingFb" placeholder="Facebook URL" class="setting-input w-full text-xs p-1.5 rounded-md focus:outline-none transition-colors">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-slate-400"></i>
+                                <input type="text" id="settingLine" placeholder="LINE公式 URL" class="setting-input w-full text-xs p-1.5 rounded-md focus:outline-none transition-colors">
+                            </div>
+                            
+                            <button id="saveSettingsBtn" class="mt-2 w-full bg-slate-800 text-white text-xs font-bold py-2 rounded-lg transition-colors">設定を保存</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -536,7 +602,6 @@
                 <div class="scanRing" id="mainRing">
                     <button id="cameraBtn" class="absolute inset-0 flex items-center justify-center rounded-full" type="button" title="写真を選ぶ" style="z-index: 20;">
                         <div class="flex flex-col items-center justify-center gap-3">
-                            <!-- アイコンを大きくし、ホバー時の動きを追加 -->
                             <div class="w-20 h-20 rounded-3xl camera-icon-bg flex items-center justify-center shadow-md transition-transform hover:scale-105 active:scale-95">
                                 <i data-lucide="camera" class="w-10 h-10 theme-text-main"></i>
                             </div>
@@ -592,13 +657,33 @@
             <!-- 結果表示エリア -->
             <div id="resultArea" class="mt-8 hidden">
                 <div class="flex items-center justify-between mb-2">
-                    <div class="font-extrabold text-lg">AIからの提案</div>
+                    <div class="font-extrabold text-lg">言語化のヒント</div>
                     <button id="copyBtn" class="copy-btn">
                         <i data-lucide="copy" class="w-3 h-3"></i> コピー
                     </button>
                 </div>
+                
                 <div id="resultContainer">
                     <!-- JSでここにコンテンツを挿入 -->
+                </div>
+
+                <!-- SNSシェアボタンエリア（元の場所） -->
+                <div class="mt-6 pt-5 border-t border-slate-200/50">
+                    <div class="text-[11px] font-bold text-slate-500 mb-3 text-center tracking-wider">見つけた価値をSNSで発信</div>
+                    <div class="flex items-center justify-center gap-4">
+                        <button id="shareInstagram" class="share-btn bg-instagram" title="Instagramを開く">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        </button>
+                        <button id="shareX" class="share-btn bg-x" title="X(Twitter)に投稿">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </button>
+                        <button id="shareFacebook" class="share-btn bg-facebook" title="Facebookを開く">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </button>
+                        <button id="shareLine" class="share-btn bg-line" title="LINEで送る">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.038 9.608.391.084.922.258 1.057.592.114.288.079.717.037 1.008l-.208 1.25c-.065.385-.295 1.428 1.253.776 1.549-.652 8.356-4.919 10.518-8.257C23.58 12.35 24 11.365 24 10.304zM7.746 13.065h-2.92c-.318 0-.575-.257-.575-.575v-4.14c0-.318.257-.575.575-.575.318 0 .576.257.576.575v3.565h2.344c.318 0 .576.257.576.575 0 .318-.258.575-.576.575zm2.844-.575c0 .318-.257.575-.576.575-.318 0-.576-.257-.576-.575v-4.14c0-.318.258-.575.576-.575.319 0 .576.257.576.575v4.14zm4.512 0c0 .318-.257.575-.576.575h-2.92c-.318 0-.575-.257-.575-.575v-4.14c0-.318.257-.575.575-.575.318 0 .576.257.576.575v4.14zm4.496-4.14v2.793l-2.094-2.82c-.063-.092-.162-.149-.27-.149-.19 0-.345.155-.345.345v4.14c0 .318.257.575.575.575.318 0 .576-.257.576-.575v-2.793l2.094 2.82c.063.092.162.149.27.149.19 0 .346-.155.346-.345v-4.14c0-.318-.258-.575-.576-.575-.318 0-.576.257-.576.575z"/></svg>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- デバッグ用：受信データ表示 -->
@@ -612,7 +697,6 @@
                 </details>
             </div>
 
-            <!-- AI感の少ない、ポジティブな表現に変更 -->
             <div class="mt-5 smallNote text-center opacity-70">
                 提案内容はアイデアの種として、あなたらしい言葉にアレンジしてご活用ください。
             </div>
@@ -624,46 +708,76 @@
         const settingsBtn = document.getElementById('settingsBtn');
         const settingsPanel = document.getElementById('settingsPanel');
 
-        // パネルの開閉
         settingsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             settingsPanel.classList.toggle('hidden');
         });
 
-        // パネル内をクリックした時は閉じないようにする
         settingsPanel.addEventListener('click', (e) => {
             e.stopPropagation();
         });
 
-        // パネル外クリックで閉じる
         document.addEventListener('click', () => {
             if (!settingsPanel.classList.contains('hidden')) {
                 settingsPanel.classList.add('hidden');
             }
         });
 
-        // モード切替（ライト/ダーク）
         const modeBtns = document.querySelectorAll('.mode-btn');
         modeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const mode = btn.getAttribute('data-mode');
-                document.documentElement.setAttribute('data-mode', mode); // 修正: body -> documentElement
+                document.documentElement.setAttribute('data-mode', mode);
                 
                 modeBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             });
         });
 
-        // テーマ切り替え
         const themeBtns = document.querySelectorAll('.color-btn');
         themeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const color = btn.getAttribute('data-color');
-                document.documentElement.setAttribute('data-theme', color); // 修正: body -> documentElement
+                document.documentElement.setAttribute('data-theme', color);
                 
                 themeBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             });
+        });
+
+        /* === SNS設定の保存と読み込み === */
+        const elSettingInsta = document.getElementById("settingInsta");
+        const elSettingX = document.getElementById("settingX");
+        const elSettingFb = document.getElementById("settingFb");
+        const elSettingLine = document.getElementById("settingLine");
+        const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+
+        // ロード
+        try {
+            elSettingInsta.value = localStorage.getItem("sns_insta") || "";
+            elSettingX.value = localStorage.getItem("sns_x") || "";
+            elSettingFb.value = localStorage.getItem("sns_fb") || "";
+            elSettingLine.value = localStorage.getItem("sns_line") || "";
+        } catch(e) {}
+
+        // 保存
+        saveSettingsBtn.addEventListener("click", () => {
+            try {
+                localStorage.setItem("sns_insta", elSettingInsta.value.trim());
+                localStorage.setItem("sns_x", elSettingX.value.trim());
+                localStorage.setItem("sns_fb", elSettingFb.value.trim());
+                localStorage.setItem("sns_line", elSettingLine.value.trim());
+                
+                const originalText = saveSettingsBtn.textContent;
+                saveSettingsBtn.textContent = "保存しました！";
+                saveSettingsBtn.classList.replace("bg-slate-800", "bg-emerald-600");
+                setTimeout(() => {
+                    saveSettingsBtn.textContent = originalText;
+                    saveSettingsBtn.classList.replace("bg-emerald-600", "bg-slate-800");
+                }, 2000);
+            } catch(e) {
+                alert("設定の保存に失敗しました。");
+            }
         });
 
         /* === API連携とメイン処理 === */
@@ -721,33 +835,98 @@
             elPreview.classList.add("hidden");
         });
 
-        // コピー機能
+        // コピー機能（汎用）
+        function executeCopy(text, successMessage, successCallback) {
+            const fallbackCopy = () => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                // textareaが画面に見えないようにスタイルを設定
+                ta.style.position = 'fixed';
+                ta.style.top = '0';
+                ta.style.left = '0';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    if (successMessage) alert(successMessage);
+                    if (successCallback) successCallback();
+                } catch (err) {
+                    console.error('Fallback copy failed', err);
+                }
+                document.body.removeChild(ta);
+            };
+
+            // Clipboard APIが使えるか確認し、権限エラーなどの場合はフォールバック
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    if (successMessage) alert(successMessage);
+                    if (successCallback) successCallback();
+                }).catch(err => {
+                    fallbackCopy();
+                });
+            } else {
+                fallbackCopy();
+            }
+        }
+
+        // コピーボタンの動作
         elCopyBtn.addEventListener("click", () => {
             if(!generatedTextForCopy) return;
             
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(generatedTextForCopy).then(() => {
-                    const originalHTML = elCopyBtn.innerHTML;
-                    elCopyBtn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> コピー完了';
-                    elCopyBtn.style.background = 'rgba(34, 197, 94, 0.1)';
-                    elCopyBtn.style.color = '#15803d';
-                    setTimeout(() => {
-                        elCopyBtn.innerHTML = originalHTML;
-                        elCopyBtn.style.background = '';
-                        elCopyBtn.style.color = '';
-                        if(window.lucide) window.lucide.createIcons();
-                    }, 2000);
-                });
-            } else {
-                const ta = document.createElement('textarea');
-                ta.value = generatedTextForCopy;
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                document.body.removeChild(ta);
-                alert("コピーしました！");
-            }
+            executeCopy(generatedTextForCopy, "", () => {
+                const originalHTML = elCopyBtn.innerHTML;
+                elCopyBtn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> コピー完了';
+                elCopyBtn.style.background = 'rgba(34, 197, 94, 0.1)';
+                elCopyBtn.style.color = '#15803d';
+                setTimeout(() => {
+                    elCopyBtn.innerHTML = originalHTML;
+                    elCopyBtn.style.background = '';
+                    elCopyBtn.style.color = '';
+                    if(window.lucide) window.lucide.createIcons();
+                }, 2000);
+            });
         });
+
+        /* === SNSシェアボタンの動作 === */
+        document.getElementById("shareX").addEventListener("click", () => {
+            if(!generatedTextForCopy) {
+                alert("先に「魅力を言語化する」を実行してください。");
+                return;
+            }
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(generatedTextForCopy)}`;
+            window.open(url, '_blank');
+        });
+
+        document.getElementById("shareLine").addEventListener("click", () => {
+            if(!generatedTextForCopy) {
+                alert("先に「魅力を言語化する」を実行してください。");
+                return;
+            }
+            const url = `https://line.me/R/msg/text/?${encodeURIComponent(generatedTextForCopy)}`;
+            window.open(url, '_blank');
+        });
+
+        document.getElementById("shareInstagram").addEventListener("click", () => {
+            if(!generatedTextForCopy) {
+                alert("先に「魅力を言語化する」を実行してください。");
+                return;
+            }
+            // Instagramはテキスト渡しができないためコピーして促す
+            executeCopy(generatedTextForCopy, "文章をコピーしました！\nInstagramアプリを開いてペーストしてください。");
+            window.open('https://www.instagram.com/', '_blank');
+        });
+
+        document.getElementById("shareFacebook").addEventListener("click", () => {
+            if(!generatedTextForCopy) {
+                alert("先に「魅力を言語化する」を実行してください。");
+                return;
+            }
+            // Facebookもテキストのみ渡しが難しいためコピーして促す
+            executeCopy(generatedTextForCopy, "文章をコピーしました！\nFacebookの投稿画面を開いてペーストしてください。");
+            window.open('https://www.facebook.com/', '_blank');
+        });
+
 
         document.getElementById("sendBtn").addEventListener("click", async () => {
             const text = (elHint.value || "").trim();
@@ -781,33 +960,41 @@
                     body: JSON.stringify(payload)
                 });
 
+                const status = res.status;
+                let rawText = "";
                 let data = {};
+
+                // まずはレスポンスをテキストとして取得
                 try {
-                    data = await res.json();
+                    rawText = await res.text();
+                    data = JSON.parse(rawText);
                 } catch (e) {
-                    try {
-                        const rawText = await res.text();
-                         if(rawText){
-                             elDebugContent.textContent = "Raw Text:\n" + rawText;
-                             renderSimpleResult(rawText);
-                             return;
-                         }
-                    } catch(e2) {}
+                    // JSONパースに失敗した場合（テキストとして扱う）
                     data = {};
                 }
                 
-                elDebugContent.textContent = JSON.stringify(data, null, 2);
-
+                // エラー時の処理（ステータスが200番台以外）
                 if (!res.ok) {
-                    renderError("サーバーエラーが発生しました: " + res.status);
+                    elDebugContent.textContent = `Status: ${status}\nResponse:\n${rawText || "空のレスポンス"}`;
+                    renderError(`サーバーエラーが発生しました (ステータス: ${status})\n\n※画面下の「受信データ（開発用）」を開いて詳細をご確認ください。`);
                     return;
                 }
 
+                // 成功時、デバッグ用に生データを表示
+                elDebugContent.textContent = rawText;
+
+                // JSONパースに失敗したが、プレーンテキストが返ってきている場合
+                if (Object.keys(data).length === 0 && rawText) {
+                    renderSimpleResult(rawText);
+                    return;
+                }
+
+                // 通常の構造化データ表示
                 renderStructuredResult(data);
 
             } catch (e) {
                 elDebugContent.textContent = "Error:\n" + String(e);
-                renderError("通信エラーが発生しました。\n" + String(e));
+                renderError("通信エラーが発生しました。\nネットワーク接続を確認してください。");
             } finally {
                 elSendBtn.disabled = false;
                 elBtnText.textContent = "魅力を言語化する";
@@ -824,6 +1011,7 @@
             generatedTextForCopy = text;
             elResultContainer.innerHTML = `
                 <div class="result-card">
+                    <span class="result-label">投稿テキスト</span>
                     <div class="result-content">${escapeHtml(text)}</div>
                 </div>
             `;
@@ -863,39 +1051,45 @@
             const hashtags = Array.isArray(data.hashtags) ? data.hashtags.join(" ") : (data.hashtags || "");
             const cta = data.cta || "";
 
-            generatedTextForCopy = `${title}\n\n${post}\n\n${hashtags}\n\n${cta}`.trim();
+            // 本文、CTA、ハッシュタグを1つにまとめる
+            let combinedPost = post;
+            if(cta) combinedPost += `\n\n${cta}`;
+            if(hashtags) combinedPost += `\n\n${hashtags}`;
+
+            // --- SNSシグネチャ（自動追記）の組み立て ---
+            let snsSignature = "";
+            const insta = elSettingInsta.value.trim();
+            const xId = elSettingX.value.trim();
+            const fb = elSettingFb.value.trim();
+            const line = elSettingLine.value.trim();
+            
+            if(insta || xId || fb || line) {
+                snsSignature += "\n\n---\n";
+                if(insta) snsSignature += `Instagram: ${insta}\n`;
+                if(xId) snsSignature += `X: ${xId}\n`;
+                if(fb) snsSignature += `Facebook: ${fb}\n`;
+                if(line) snsSignature += `LINE: ${line}\n`;
+            }
+            // ----------------------------------------
+
+            // コピー用にもタイトル、まとめた本文、SNSシグネチャをセット
+            generatedTextForCopy = `${title ? title + '\n\n' : ''}${combinedPost}${snsSignature}`.trim();
 
             let html = "";
 
             if(title) {
                 html += `
-                <div class="result-card theme-border-l">
+                <div class="result-card theme-border-l mb-3">
                     <span class="result-label">タイトル案</span>
                     <div class="result-content font-bold text-lg">${escapeHtml(title)}</div>
                 </div>`;
             }
 
-            if(post) {
+            if(combinedPost || snsSignature) {
                 html += `
                 <div class="result-card">
-                    <span class="result-label">投稿本文</span>
-                    <div class="result-content">${escapeHtml(post)}</div>
-                </div>`;
-            }
-            
-            if(hashtags) {
-                 html += `
-                <div class="result-card theme-tag-bg">
-                    <span class="result-label">ハッシュタグ</span>
-                    <div class="result-content theme-text font-medium">${escapeHtml(hashtags)}</div>
-                </div>`;
-            }
-            
-            if(cta) {
-                 html += `
-                <div class="result-card theme-bg-light">
-                    <span class="result-label">アクション誘導 (CTA)</span>
-                    <div class="result-content theme-text-dark font-bold">${escapeHtml(cta)}</div>
+                    <span class="result-label">投稿テキスト（コピーして使えます）</span>
+                    <div class="result-content">${escapeHtml(combinedPost + snsSignature)}</div>
                 </div>`;
             }
 

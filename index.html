@@ -485,9 +485,70 @@
             95% { opacity: 1; }
             100% { top: 100%; opacity: 0; }
         }
+        /* パスワード画面 */
+        #pwOverlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(1200px 700px at 50% 10%, var(--color-bg1), var(--color-bg2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 24px;
+        }
+        #pwOverlay.hidden { display: none; }
+        .pw-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            border-radius: 28px;
+            padding: 40px 32px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        #pwInput {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid var(--input-border);
+            padding: 14px;
+            outline: none;
+            background: var(--input-bg);
+            color: var(--ink);
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 0.2em;
+            margin-top: 20px;
+            margin-bottom: 16px;
+            transition: box-shadow .12s ease, border-color .12s ease;
+        }
+        #pwInput:focus {
+            border-color: rgba(var(--color-main), .55);
+            box-shadow: 0 0 0 6px rgba(var(--color-main), .12);
+        }
+        #pwError {
+            color: #ef4444;
+            font-size: 13px;
+            margin-bottom: 12px;
+            min-height: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- パスワード画面 -->
+    <div id="pwOverlay">
+        <div class="pw-card">
+            <div class="text-3xl font-black tracking-[.08em]">価値みっけ</div>
+            <div class="text-[11px] tracking-[.35em] text-slate-500 mt-2">VISUAL VALUE FINDER</div>
+            <div class="mt-6 text-sm font-bold" style="color:var(--ink);">🔑 パスワードを入力してください</div>
+            <input id="pwInput" type="password" placeholder="••••••••" />
+            <div id="pwError"></div>
+            <button id="pwBtn" class="btnPrimary w-full" style="border:none;cursor:pointer;">入力する</button>
+            <div class="text-[11px] text-slate-400 mt-4">ご購入いただいた方にパスワードをお伝えしています</div>
+        </div>
+    </div>
+
     <main class="min-h-screen flex items-center justify-center p-4 sm:p-6">
         <section class="glass w-full max-w-[540px] rounded-[28px] p-6 sm:p-8">
 
@@ -749,6 +810,62 @@
         =================================== */
         const API_URL = "https://kachi-mikke-spc.yymmatsu.workers.dev/chat";
 
+        /* ===================================
+           パスワード認証
+        =================================== */
+        let savedPassword = sessionStorage.getItem("kachi_pw") || "";
+
+        const pwOverlay = document.getElementById("pwOverlay");
+        const pwInput   = document.getElementById("pwInput");
+        const pwBtn     = document.getElementById("pwBtn");
+        const pwError   = document.getElementById("pwError");
+
+        // 有効期限チェック（モニター期間は2025/3/31まで無制限）
+        const FREE_UNTIL = new Date("2025-04-01T00:00:00+09:00");
+        const now = new Date();
+        const isFree = now < FREE_UNTIL;
+
+        if (isFree || savedPassword) {
+            pwOverlay.classList.add("hidden");
+        }
+
+        async function checkPassword(pw) {
+            try {
+                const res = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password: pw, text: "__pw_check__" })
+                });
+                const data = await res.json();
+                // INVALID_PASSWORDが返ればNG、それ以外はOK
+                return data.error !== "INVALID_PASSWORD";
+            } catch(e) {
+                return false;
+            }
+        }
+
+        pwBtn.addEventListener("click", async () => {
+            const pw = pwInput.value.trim();
+            if (!pw) { pwError.textContent = "パスワードを入力してください"; return; }
+            pwBtn.textContent = "確認中...";
+            pwBtn.disabled = true;
+            pwError.textContent = "";
+            const ok = await checkPassword(pw);
+            if (ok) {
+                sessionStorage.setItem("kachi_pw", pw);
+                savedPassword = pw;
+                pwOverlay.classList.add("hidden");
+            } else {
+                pwError.textContent = "パスワードが違います。ご確認ください。";
+            }
+            pwBtn.textContent = "入力する";
+            pwBtn.disabled = false;
+        });
+
+        pwInput.addEventListener("keydown", e => {
+            if (e.key === "Enter") pwBtn.click();
+        });
+
         const elHint           = document.getElementById("hint");
         const elFile           = document.getElementById("file");
         const elPreview        = document.getElementById("preview");
@@ -933,7 +1050,7 @@
             elMainRing.classList.add("scanning");
             if (imageBase64) elScanOverlay.style.display = "block";
 
-            const payload = { text, imageBase64 };
+            const payload = { text, imageBase64, password: savedPassword };
 
             try {
                 const res = await fetch(API_URL, {

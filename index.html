@@ -614,7 +614,7 @@
                 </div>
             </div>
 
-            <h1 class="text-center text-3xl sm:text-4xl font-black tracking-[.08em]">価値みっけ</h1>
+            <h1 id="siteTitle" class="text-center text-3xl sm:text-4xl font-black tracking-[.08em] cursor-pointer hover:opacity-70 transition-opacity" title="最初からやり直す">価値みっけ</h1>
             <div class="text-center text-[11px] tracking-[.35em] text-slate-500 mt-2">VISUAL VALUE FINDER</div>
 
             <!-- 無料モニターバナー -->
@@ -1204,6 +1204,25 @@
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
         }
+
+        // タイトルクリックで初期状態（トップ）に戻す処理
+        document.getElementById("siteTitle").addEventListener("click", () => {
+            // 入力内容のリセット
+            elHint.value = "";
+            imageBase64 = "";
+            elFile.value = "";
+            elPreview.src = "";
+            elPreview.classList.add("hidden");
+            hideInputError();
+
+            // 結果表示のリセット
+            elResultArea.classList.add("hidden");
+            elResultContainer.innerHTML = "";
+            generatedTextForCopy = "";
+
+            // ページ上部へスクロール
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         try {
             if (window.lucide && typeof window.lucide.createIcons === "function") {

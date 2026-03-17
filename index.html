@@ -552,15 +552,34 @@
         <div class="pw-card">
             <div class="text-3xl font-black tracking-[.08em]">価値みっけ</div>
             <div class="text-[11px] tracking-[.35em] text-slate-500 mt-2">VISUAL VALUE FINDER</div>
-            <div class="mt-6 text-sm font-bold" style="color:var(--ink);">🔑 パスワードを入力してください</div>
+
+            <!-- 無料期間終了メッセージ（期限後に表示） -->
+            <div id="expiredMsg" style="display:none;">
+                <div class="mt-6 mb-4 p-4 rounded-2xl" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);">
+                    <div class="text-base font-bold" style="color:#dc2626;">⏰ 無料期間は終了しました</div>
+                    <div class="text-xs mt-2" style="color:#64748b;">続けてご利用いただくには、有料プランへのお申込みが必要です。</div>
+                </div>
+                <a id="applyBtn" href="https://YOUR-BASE-URL.thebase.in" target="_blank"
+                   class="btnPrimary w-full block text-center text-white no-underline"
+                   style="border:none;cursor:pointer;text-decoration:none;padding:14px;border-radius:14px;font-weight:800;font-size:15px;margin-bottom:16px;">
+                    🛒 申込みはこちら（月額2,980円）
+                </a>
+                <div class="text-[11px] text-slate-400 mb-4">すでにご購入済みの方はパスワードをご入力ください</div>
+            </div>
+
+            <!-- 通常パスワード入力 -->
+            <div id="normalPwMsg" class="mt-6 text-sm font-bold" style="color:var(--ink);">🔑 パスワードを入力してください</div>
             <input id="pwInput" type="password" placeholder="••••••••" />
             <div id="pwError"></div>
             <button id="pwBtn" class="btnPrimary w-full" style="border:none;cursor:pointer;">入力する</button>
-            <div class="text-[11px] text-slate-400 mt-4">ご購入いただいた方にパスワードをお伝えしています</div>
+            <div id="purchaseNote" class="text-[11px] text-slate-400 mt-4">ご購入いただいた方にパスワードをお伝えしています</div>
         </div>
     </div>
 
-    <main class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+    <!-- 無料期間バナー -->
+    <div id="freeBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:1000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;"></div>
+
+    <main class="min-h-screen flex items-center justify-center p-4 sm:p-6" id="mainArea">
         <section class="glass w-full max-w-[540px] rounded-[28px] p-6 sm:p-8">
 
             <!-- ヘッダー -->
@@ -858,8 +877,36 @@
         const now = new Date();
         const isFree = now < FREE_UNTIL;
 
+        // 期限切れ後はパスワード画面を「終了」表示に切り替える
+        if (!isFree) {
+            document.getElementById("expiredMsg").style.display = "block";
+            document.getElementById("normalPwMsg").style.display = "none";
+            document.getElementById("purchaseNote").style.display = "none";
+        }
+
         if (isFree || savedPassword) {
             pwOverlay.classList.add("hidden");
+        }
+
+        // 無料期間バナーの表示
+        const freeBanner = document.getElementById("freeBanner");
+        const mainArea = document.getElementById("mainArea");
+        if (isFree && !savedPassword) {
+            const msLeft = FREE_UNTIL - now;
+            const daysLeft = Math.ceil(msLeft / (1000 * 60 * 60 * 24));
+            const freeUntilStr = "4月1日";
+            if (daysLeft <= 7) {
+                freeBanner.style.display = "block";
+                freeBanner.style.background = "linear-gradient(90deg,#ef4444,#dc2626)";
+                freeBanner.style.color = "#fff";
+                freeBanner.innerHTML = `⚠️ 無料期間は残り<strong>${daysLeft}日</strong>です（${freeUntilStr}まで）&nbsp;&nbsp;<a href="https://YOUR-BASE-URL.thebase.in" target="_blank" style="color:#fff;text-decoration:underline;font-size:12px;">申込みはこちら →</a>`;
+            } else {
+                freeBanner.style.display = "block";
+                freeBanner.style.background = "linear-gradient(90deg,rgb(14,165,233),rgb(2,132,199))";
+                freeBanner.style.color = "#fff";
+                freeBanner.innerHTML = `🎁 ${freeUntilStr}まで<strong>無料</strong>でお試しいただけます`;
+            }
+            mainArea.style.paddingTop = "52px";
         }
 
         async function checkPassword(pw) {

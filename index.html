@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.383.0/dist/umd/lucide.min.js"></script>
     <style>
         /* === 共通設定 === */
         :root {
@@ -653,14 +653,14 @@
 
             <div class="mt-6 flex items-center justify-center">
                 <div class="scanRing" id="mainRing">
-                    <button id="cameraBtn" class="absolute inset-0 flex items-center justify-center rounded-full" type="button" title="写真を選ぶ" style="z-index: 20;">
+                    <label for="file" class="absolute inset-0 flex items-center justify-center rounded-full cursor-pointer" title="写真を選ぶ" style="z-index: 20;">
                         <div class="flex flex-col items-center justify-center gap-3">
                             <div class="w-20 h-20 rounded-3xl camera-icon-bg flex items-center justify-center shadow-md transition-transform hover:scale-105 active:scale-95">
                                 <i data-lucide="camera" class="w-10 h-10 theme-text-main"></i>
                             </div>
                             <div class="text-[13px] font-bold text-slate-500">写真を選ぶ</div>
                         </div>
-                    </button>
+                    </label>
                     <div class="scanBtn">SMART SCAN</div>
                 </div>
             </div>
@@ -999,8 +999,6 @@
             });
         }
 
-        document.getElementById("cameraBtn").addEventListener("click", () => elFile.click());
-
         elFile.addEventListener("change", async () => {
             const file = elFile.files && elFile.files[0];
             if (!file) return;
@@ -1322,11 +1320,17 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        try {
-            if (window.lucide && typeof window.lucide.createIcons === "function") {
-                window.lucide.createIcons();
-            }
-        } catch(e) {}
+        // アイコン確実初期化
+        function initIcons() {
+            try {
+                if (window.lucide && typeof window.lucide.createIcons === "function") {
+                    window.lucide.createIcons();
+                }
+            } catch(e) {}
+        }
+        document.addEventListener("DOMContentLoaded", initIcons);
+        setTimeout(initIcons, 300);
+        setTimeout(initIcons, 800);
     </script>
 </body>
 </html>

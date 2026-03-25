@@ -16,6 +16,9 @@
     <meta name="twitter:description" content="一枚の写真から、ビジネスの価値を言語化。視覚情報と文脈を解析し、投稿の叩き台をつくります。" />
     <meta name="twitter:image" content="https://kachi-mikke.pages.dev/ogp.jpg" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -46,86 +49,86 @@
             --panel-bg: rgba(0, 0, 0, 0.25);
         }
 
-        /* Blue (Sky) */
+        /* Gold メイン */
         :root[data-theme="blue"] {
-            --color-main: 14, 165, 233;
-            --color-dark: 2, 132, 199;
-            --color-light: 125, 211, 252;
+            --color-main: 208, 169, 0;
+            --color-dark: 195, 144, 0;
+            --color-light: 240, 220, 120;
         }
         :root[data-theme="blue"] {
-            --color-bg1: #eaf7ff;
-            --color-bg2: #f7fbff;
-            --color-text: #0b77a8;
-            --color-text-light: #c7f4ff;
+            --color-bg1: #FFF9E6;
+            --color-bg2: #fffdf7;
+            --color-text: #8a6d00;
+            --color-text-light: #fff9e6;
         }
         :root[data-mode="dark"][data-theme="blue"] {
-            --color-bg1: #082f49;
-            --color-bg2: #0f172a;
-            --color-text: #38bdf8;
-            --color-text-light: #0ea5e9;
+            --color-bg1: #1a1500;
+            --color-bg2: #0f0c00;
+            --color-text: #D0A900;
+            --color-text-light: #C39000;
         }
 
-        /* Green (Emerald) */
+        /* Black */
         :root[data-theme="green"] {
-            --color-main: 16, 185, 129;
-            --color-dark: 5, 150, 105;
-            --color-light: 110, 231, 183;
+            --color-main: 30, 30, 30;
+            --color-dark: 0, 0, 0;
+            --color-light: 80, 80, 80;
         }
         :root[data-theme="green"] {
-            --color-bg1: #ecfdf5;
-            --color-bg2: #f8fafc;
-            --color-text: #047857;
-            --color-text-light: #d1fae5;
+            --color-bg1: #f5f5f5;
+            --color-bg2: #ffffff;
+            --color-text: #111111;
+            --color-text-light: #e0e0e0;
         }
         :root[data-mode="dark"][data-theme="green"] {
-            --color-bg1: #064e3b;
-            --color-bg2: #0f172a;
-            --color-text: #34d399;
-            --color-text-light: #10b981;
+            --color-bg1: #000000;
+            --color-bg2: #111111;
+            --color-text: #cccccc;
+            --color-text-light: #888888;
         }
 
-        /* Orange */
+        /* Cream */
         :root[data-theme="orange"] {
-            --color-main: 249, 115, 22;
-            --color-dark: 234, 88, 12;
-            --color-light: 253, 186, 116;
+            --color-main: 195, 144, 0;
+            --color-dark: 160, 118, 0;
+            --color-light: 255, 243, 200;
         }
         :root[data-theme="orange"] {
-            --color-bg1: #fff7ed;
-            --color-bg2: #fffaf5;
-            --color-text: #c2410c;
-            --color-text-light: #ffedd5;
+            --color-bg1: #fffdf0;
+            --color-bg2: #ffffff;
+            --color-text: #7a5c00;
+            --color-text-light: #fff9e6;
         }
         :root[data-mode="dark"][data-theme="orange"] {
-            --color-bg1: #431407;
-            --color-bg2: #0f172a;
-            --color-text: #fb923c;
-            --color-text-light: #f97316;
+            --color-bg1: #2a2000;
+            --color-bg2: #1a1400;
+            --color-text: #C39000;
+            --color-text-light: #a07800;
         }
 
-        /* Pink */
+        /* Dark Gold */
         :root[data-theme="pink"] {
-            --color-main: 236, 72, 153;
-            --color-dark: 219, 39, 119;
-            --color-light: 249, 168, 212;
+            --color-main: 180, 130, 0;
+            --color-dark: 140, 100, 0;
+            --color-light: 240, 210, 120;
         }
         :root[data-theme="pink"] {
-            --color-bg1: #fdf2f8;
-            --color-bg2: #fffcfd;
-            --color-text: #be185d;
-            --color-text-light: #fce7f3;
+            --color-bg1: #fdf8e6;
+            --color-bg2: #fffcf0;
+            --color-text: #6b4d00;
+            --color-text-light: #faeac0;
         }
         :root[data-mode="dark"][data-theme="pink"] {
-            --color-bg1: #500724;
-            --color-bg2: #0f172a;
-            --color-text: #f472b6;
-            --color-text-light: #ec4899;
+            --color-bg1: #1f1800;
+            --color-bg2: #150f00;
+            --color-text: #c8a000;
+            --color-text-light: #a07800;
         }
 
         body {
             background: radial-gradient(1200px 700px at 50% 10%, var(--color-bg1), var(--color-bg2));
             color: var(--ink);
-            font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            font-family: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
             transition: background 0.5s ease, color 0.3s ease;
         }
 
@@ -183,10 +186,10 @@
             transform: scale(1.1);
             box-shadow: 0 0 0 2px var(--card), 0 0 0 4px rgb(var(--color-main));
         }
-        .c-blue { background: #0ea5e9; }
-        .c-green { background: #10b981; }
-        .c-orange { background: #f97316; }
-        .c-pink { background: #ec4899; }
+        .c-blue { background: linear-gradient(135deg, #D0A900, #FFF9E6); }
+        .c-green { background: #000000; }
+        .c-orange { background: #C39000; }
+        .c-pink { background: #b48200; }
 
         .chip {
             border: 1px solid rgba(var(--color-main), .35);
@@ -578,7 +581,6 @@
     </div>
 
     <!-- 無料期間バナー -->
-    <div id="freeBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:1000;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;"></div>
 
     <main class="min-h-screen flex items-center justify-center p-4 sm:p-6" id="mainArea">
         <section class="glass w-full max-w-[540px] rounded-[28px] p-6 sm:p-8">
@@ -610,10 +612,10 @@
                     <div class="mb-5">
                         <div class="text-[11px] font-bold text-slate-500 mb-2 tracking-wider">テーマカラー</div>
                         <div class="flex items-center justify-between px-1">
-                            <button class="color-btn c-blue" data-color="blue" title="ブルー系"></button>
-                            <button class="color-btn c-green" data-color="green" title="グリーン系"></button>
-                            <button class="color-btn c-orange" data-color="orange" title="オレンジ系"></button>
-                            <button class="color-btn c-pink" data-color="pink" title="ピンク系"></button>
+                            <button class="color-btn c-blue" data-color="blue" title="ゴールド"></button>
+                            <button class="color-btn c-green" data-color="green" title="ブラック"></button>
+                            <button class="color-btn c-orange" data-color="orange" title="クリーム"></button>
+                            <button class="color-btn c-pink" data-color="pink" title="ダークゴールド"></button>
                         </div>
                     </div>
 
@@ -1126,6 +1128,12 @@
             }
             hideInputError();
 
+            // ② 使用回数チェック（パスワードなしの場合のみ）
+            if (!savedPassword && isOverLimit()) {
+                pwOverlay.classList.remove("hidden");
+                return;
+            }
+
             elSendBtn.disabled = true;
             elBtnText.textContent = "解析中";
             elBtnText.classList.add("loading-dots");
@@ -1156,10 +1164,38 @@
                 }
 
                 if (Object.keys(data).length === 0 && rawText) {
+                    // 成功時に使用回数をカウント
+                    if (!savedPassword) {
+                        const newCount = incrementUseCount();
+                        const remain = USE_LIMIT - newCount;
+                        const banner = document.getElementById("trialBanner");
+                        if (banner) {
+                            if (remain <= 0) {
+                                banner.innerHTML = "⚠️ 無料体験が終了しました。続けてご利用の方はご購入ください。";
+                                banner.style.background = "linear-gradient(90deg,#ef4444,#dc2626)";
+                            } else {
+                                banner.innerHTML = `🎁 無料体験 残り<strong>${remain}回</strong>（全3回）`;
+                            }
+                        }
+                    }
                     renderSimpleResult(rawText);
                     return;
                 }
 
+                // 成功時に使用回数をカウント
+                if (!savedPassword) {
+                    const newCount = incrementUseCount();
+                    const remain = USE_LIMIT - newCount;
+                    const banner = document.getElementById("trialBanner");
+                    if (banner) {
+                        if (remain <= 0) {
+                            banner.innerHTML = "⚠️ 無料体験が終了しました。続けてご利用の方はご購入ください。";
+                            banner.style.background = "linear-gradient(90deg,#ef4444,#dc2626)";
+                        } else {
+                            banner.innerHTML = `🎁 無料体験 残り<strong>${remain}回</strong>（全3回）`;
+                        }
+                    }
+                }
                 renderStructuredResult(data);
 
             } catch(e) {

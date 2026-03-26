@@ -899,25 +899,36 @@
             pwOverlay.classList.add("hidden");
         }
 
-        // 無料期間バナーの表示
-        const freeBanner = document.getElementById("freeBanner");
-        const mainArea = document.getElementById("mainArea");
-        if (isFree && !savedPassword) {
-            const msLeft = FREE_UNTIL - now;
-            const daysLeft = Math.ceil(msLeft / (1000 * 60 * 60 * 24));
-            const freeUntilStr = "4月1日";
-            if (daysLeft <= 7) {
-                freeBanner.style.display = "block";
-                freeBanner.style.background = "linear-gradient(90deg,#ef4444,#dc2626)";
-                freeBanner.style.color = "#fff";
-                freeBanner.innerHTML = `⚠️ 無料期間は残り<strong>${daysLeft}日</strong>です（${freeUntilStr}まで）&nbsp;&nbsp;<a href="https://YOUR-BASE-URL.thebase.in" target="_blank" style="color:#fff;text-decoration:underline;font-size:12px;">申込みはこちら →</a>`;
+        // ===================================
+        // 使用回数管理（3回まで無料）
+        // ===================================
+        const USE_LIMIT = 3;
+        const STRIPE_URL = "https://buy.stripe.com/3cIfZggXg2IRdhdcVecV203";
+
+        function getUseCount() {
+            return parseInt(localStorage.getItem("kachi_use_count") || "0");
+        }
+        function incrementUseCount() {
+            const c = getUseCount() + 1;
+            localStorage.setItem("kachi_use_count", c);
+            return c;
+        }
+        function isOverLimit() {
+            return getUseCount() >= USE_LIMIT && !savedPassword;
+        }
+
+        // 残回数バナー表示
+        const trialBannerEl = document.getElementById("trialBanner");
+        if (trialBannerEl && !savedPassword) {
+            const remain = USE_LIMIT - getUseCount();
+            if (remain > 0) {
+                trialBannerEl.style.display = "block";
+                trialBannerEl.innerHTML = `🎁 無料体験 残り<strong>${remain}回</strong>（全${USE_LIMIT}回）`;
             } else {
-                freeBanner.style.display = "block";
-                freeBanner.style.background = "linear-gradient(90deg,rgb(14,165,233),rgb(2,132,199))";
-                freeBanner.style.color = "#fff";
-                freeBanner.innerHTML = `🎁 ${freeUntilStr}まで<strong>無料</strong>でお試しいただけます`;
+                trialBannerEl.style.display = "block";
+                trialBannerEl.style.background = "linear-gradient(90deg,#ef4444,#dc2626)";
+                trialBannerEl.innerHTML = `⚠️ 無料体験が終了しました &nbsp;<a href="${STRIPE_URL}" target="_blank" style="color:#fff;text-decoration:underline;">ご購入はこちら →</a>`;
             }
-            mainArea.style.paddingTop = "52px";
         }
 
         async function checkPassword(pw) {

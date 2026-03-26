@@ -505,7 +505,7 @@
         #pwOverlay {
             position: fixed;
             inset: 0;
-            background: radial-gradient(1200px 700px at 50% 10%, var(--color-bg1), var(--color-bg2));
+            background: linear-gradient(160deg, #1a1200 0%, #0d0900 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -514,40 +514,100 @@
         }
         #pwOverlay.hidden { display: none; }
         .pw-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow);
+            background: linear-gradient(160deg, #2a1f00 0%, #1a1200 100%);
+            border: 1px solid rgba(208,169,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(208,169,0,0.1);
             border-radius: 28px;
             padding: 40px 32px;
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
+        .pw-lock-icon {
+            font-size: 52px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .pw-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+        .pw-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.55);
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+        .pw-stripe-btn {
+            display: block;
+            width: 100%;
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #D0A900, #C39000);
+            color: #000;
+            font-weight: 900;
+            font-size: 15px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            box-shadow: 0 8px 24px rgba(208,169,0,0.35);
+        }
+        .pw-stripe-btn:hover { opacity: 0.85; }
+        .pw-divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 24px 0 16px;
+            color: rgba(255,255,255,0.3);
+            font-size: 11px;
+        }
+        .pw-divider::before, .pw-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.15);
+        }
         #pwInput {
             width: 100%;
             border-radius: 14px;
-            border: 1px solid var(--input-border);
+            border: 1px solid rgba(208,169,0,0.3);
             padding: 14px;
             outline: none;
-            background: var(--input-bg);
-            color: var(--ink);
-            font-size: 18px;
+            background: rgba(255,255,255,0.07);
+            color: #ffffff;
+            font-size: 16px;
             text-align: center;
             letter-spacing: 0.2em;
-            margin-top: 20px;
-            margin-bottom: 16px;
-            transition: box-shadow .12s ease, border-color .12s ease;
-        }
-        #pwInput:focus {
-            border-color: rgba(var(--color-main), .55);
-            box-shadow: 0 0 0 6px rgba(var(--color-main), .12);
-        }
-        #pwError {
-            color: #ef4444;
-            font-size: 13px;
             margin-bottom: 12px;
-            min-height: 20px;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        #pwInput::placeholder { color: rgba(255,255,255,0.3); }
+        #pwInput:focus {
+            border-color: rgba(208,169,0,0.7);
+            box-shadow: 0 0 0 4px rgba(208,169,0,0.15);
+        }
+        .pw-enter-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, #3a2e00, #2a2000);
+            border: 1px solid rgba(208,169,0,0.4);
+            color: #D0A900;
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .pw-enter-btn:hover { background: linear-gradient(90deg, #4a3a00, #3a2a00); }
+        #pwError {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-bottom: 10px;
+            min-height: 18px;
         }
     </style>
 </head>
@@ -555,29 +615,23 @@
     <!-- パスワード画面 -->
     <div id="pwOverlay">
         <div class="pw-card">
-            <div class="text-3xl font-black tracking-[.08em]">価値みっけ</div>
-            <div class="text-[11px] tracking-[.35em] text-slate-500 mt-2">VISUAL VALUE FINDER</div>
+            <span class="pw-lock-icon">🔐</span>
+            <div class="pw-title">ご利用いただくには<br>パスワードが必要です</div>
+            <div class="pw-desc" id="pwDesc">価値みっけは月額2,980円のサービスです。<br>ご購入後にパスワードをお届けします。</div>
 
-            <!-- 無料期間終了メッセージ（期限後に表示） -->
-            <div id="expiredMsg" style="display:none;">
-                <div class="mt-6 mb-4 p-4 rounded-2xl" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);">
-                    <div class="text-base font-bold" style="color:#dc2626;">⏰ 無料期間は終了しました</div>
-                    <div class="text-xs mt-2" style="color:#64748b;">続けてご利用いただくには、有料プランへのお申込みが必要です。</div>
-                </div>
-                <a id="applyBtn" href="https://YOUR-BASE-URL.thebase.in" target="_blank"
-                   class="btnPrimary w-full block text-center text-white no-underline"
-                   style="border:none;cursor:pointer;text-decoration:none;padding:14px;border-radius:14px;font-weight:800;font-size:15px;margin-bottom:16px;">
-                    🛒 申込みはこちら（月額2,980円）
-                </a>
-                <div class="text-[11px] text-slate-400 mb-4">すでにご購入済みの方はパスワードをご入力ください</div>
-            </div>
+            <a href="https://buy.stripe.com/3cIfZggXg2IRdhdcVecV203" target="_blank" class="pw-stripe-btn">
+                🔒 安全なStripeで購入する（月額2,980円）
+            </a>
 
-            <!-- 通常パスワード入力 -->
-            <div id="normalPwMsg" class="mt-6 text-sm font-bold" style="color:var(--ink);">🔑 パスワードを入力してください</div>
-            <input id="pwInput" type="password" placeholder="••••••••" />
+            <div class="pw-divider">すでにパスワードをお持ちの方</div>
+
+            <input id="pwInput" type="password" placeholder="パスワードを入力" />
             <div id="pwError"></div>
-            <button id="pwBtn" class="btnPrimary w-full" style="border:none;cursor:pointer;">入力する</button>
-            <div id="purchaseNote" class="text-[11px] text-slate-400 mt-4">ご購入いただいた方にパスワードをお伝えしています</div>
+            <button id="pwBtn" class="pw-enter-btn">入室して使い始める</button>
+
+            <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.25);">
+                安全な決済はStripeが処理します
+            </div>
         </div>
     </div>
 
@@ -887,11 +941,10 @@
         const now = new Date();
         const isFree = now < FREE_UNTIL;
 
-        // 期限切れ後はパスワード画面を「終了」表示に切り替える
+        // 期限切れ後はパスワード画面の説明文を変更
         if (!isFree) {
-            document.getElementById("expiredMsg").style.display = "block";
-            document.getElementById("normalPwMsg").style.display = "none";
-            document.getElementById("purchaseNote").style.display = "none";
+            const pwDesc = document.getElementById("pwDesc");
+            if (pwDesc) pwDesc.textContent = "無料体験期間が終了しました。続けてご利用いただくには購入が必要です。";
         }
 
         if (isFree || savedPassword) {

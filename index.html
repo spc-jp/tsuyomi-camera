@@ -653,7 +653,14 @@
 
             <div class="mt-6 flex items-center justify-center">
                 <div class="scanRing" id="mainRing">
-                    <label for="file" class="absolute inset-0 flex items-center justify-center rounded-full cursor-pointer" title="写真を選ぶ" style="z-index: 20;">
+                    <!-- スキャン中オーバーレイ（円の中） -->
+                    <div id="ringOverlay" style="display:none;position:absolute;inset:0;border-radius:9999px;overflow:hidden;z-index:15;pointer-events:none;">
+                        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(var(--color-main),0.15) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--color-main),0.15) 1px,transparent 1px);background-size:18px 18px;"></div>
+                        <div id="ringLine" style="position:absolute;top:0;left:0;width:100%;height:3px;background:rgb(var(--color-main));box-shadow:0 0 10px rgb(var(--color-main)),0 0 20px rgb(var(--color-light));animation:scanMove 1.5s linear infinite;"></div>
+                        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:rgb(var(--color-main));font-size:11px;font-weight:800;letter-spacing:0.2em;animation:pulse 1s ease-in-out infinite;">ANALYZING...</div>
+                    </div>
+                    <!-- カメラボタン（スキャン中は非表示） -->
+                    <label id="cameraLabel" for="file" class="absolute inset-0 flex items-center justify-center rounded-full cursor-pointer" title="写真を選ぶ" style="z-index: 20;">
                         <div class="flex flex-col items-center justify-center gap-3">
                             <div class="w-20 h-20 rounded-3xl camera-icon-bg flex items-center justify-center shadow-md transition-transform hover:scale-105 active:scale-95">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--color-main))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -693,12 +700,7 @@
                             <button id="clearPhotoBtn" type="button" class="btnGhost text-sm">写真を外す</button>
                         </div>
                     </div>
-                    <div class="mt-3 relative rounded-xl overflow-hidden" id="previewContainer" style="min-height:0;">
-                        <div id="scanOverlay" class="scan-overlay">
-                            <div class="scan-grid"></div>
-                            <div class="scan-line"></div>
-                            <div class="scan-text">ANALYZING...</div>
-                        </div>
+                    <div class="mt-3 relative rounded-xl overflow-hidden" id="previewContainer">
                         <img id="preview" alt="" class="w-full hidden" />
                     </div>
                 </div>
@@ -963,7 +965,8 @@
         const elSendBtn        = document.getElementById("sendBtn");
         const elBtnText        = document.getElementById("btnText");
         const elCopyBtn        = document.getElementById("copyBtn");
-        const elScanOverlay    = document.getElementById("scanOverlay");
+        const elScanOverlay    = document.getElementById("ringOverlay");
+        const elCameraLabel    = document.getElementById("cameraLabel");
         const elMainRing       = document.getElementById("mainRing");
         const elInputError     = document.getElementById("inputError");
 
@@ -1006,22 +1009,22 @@
             const file = elFile.files && elFile.files[0];
             if (!file) return;
 
-            // スキャンアニメーション開始
+            // スキャンアニメーション開始（円の中でアニメーション）
             elMainRing.classList.add("scanning");
-            document.getElementById("previewContainer").style.minHeight = "200px";
             elScanOverlay.style.display = "block";
+            elCameraLabel.style.display = "none";
 
             try {
                 const dataUrl = await resizeAndToBase64(file);
                 imageBase64 = dataUrl;
-                elPreview.src = dataUrl;
-                elPreview.classList.remove("hidden");
 
-                // 1.5秒後にアニメーション終了（読み込み完了感を演出）
+                // 1.5秒後にアニメーション終了してプレビュー表示
                 setTimeout(() => {
                     elMainRing.classList.remove("scanning");
                     elScanOverlay.style.display = "none";
-                    document.getElementById("previewContainer").style.minHeight = "0";
+                    elCameraLabel.style.display = "";
+                    elPreview.src = dataUrl;
+                    elPreview.classList.remove("hidden");
                 }, 1500);
 
             } catch(e) {
@@ -1029,6 +1032,7 @@
                 elPreview.classList.add("hidden");
                 elMainRing.classList.remove("scanning");
                 elScanOverlay.style.display = "none";
+                elCameraLabel.style.display = "";
                 alert("画像の読み込みに失敗しました。");
             }
         });
@@ -1158,8 +1162,8 @@
 
             elMainRing.classList.add("scanning");
             if (imageBase64) {
-                document.getElementById("previewContainer").style.minHeight = "200px";
                 elScanOverlay.style.display = "block";
+                elCameraLabel.style.display = "none";
             }
 
             const payload = { text, imageBase64, password: savedPassword };
@@ -1225,7 +1229,7 @@
                 elBtnText.textContent = "魅力を言語化する";
                 elBtnText.classList.remove("loading-dots");
                 elScanOverlay.style.display = "none";
-                document.getElementById("previewContainer").style.minHeight = "0";
+                elCameraLabel.style.display = "";
                 elMainRing.classList.remove("scanning");
                 if (window.lucide) window.lucide.createIcons();
             }

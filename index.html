@@ -693,7 +693,7 @@
                             <button id="clearPhotoBtn" type="button" class="btnGhost text-sm">写真を外す</button>
                         </div>
                     </div>
-                    <div class="mt-3 relative rounded-xl overflow-hidden" id="previewContainer">
+                    <div class="mt-3 relative rounded-xl overflow-hidden" id="previewContainer" style="min-height:0;">
                         <div id="scanOverlay" class="scan-overlay">
                             <div class="scan-grid"></div>
                             <div class="scan-line"></div>
@@ -1005,14 +1005,30 @@
         elFile.addEventListener("change", async () => {
             const file = elFile.files && elFile.files[0];
             if (!file) return;
+
+            // スキャンアニメーション開始
+            elMainRing.classList.add("scanning");
+            document.getElementById("previewContainer").style.minHeight = "200px";
+            elScanOverlay.style.display = "block";
+
             try {
                 const dataUrl = await resizeAndToBase64(file);
                 imageBase64 = dataUrl;
                 elPreview.src = dataUrl;
                 elPreview.classList.remove("hidden");
+
+                // 1.5秒後にアニメーション終了（読み込み完了感を演出）
+                setTimeout(() => {
+                    elMainRing.classList.remove("scanning");
+                    elScanOverlay.style.display = "none";
+                    document.getElementById("previewContainer").style.minHeight = "0";
+                }, 1500);
+
             } catch(e) {
                 imageBase64 = "";
                 elPreview.classList.add("hidden");
+                elMainRing.classList.remove("scanning");
+                elScanOverlay.style.display = "none";
                 alert("画像の読み込みに失敗しました。");
             }
         });
@@ -1141,7 +1157,10 @@
             elResultArea.classList.add("hidden");
 
             elMainRing.classList.add("scanning");
-            if (imageBase64) elScanOverlay.style.display = "block";
+            if (imageBase64) {
+                document.getElementById("previewContainer").style.minHeight = "200px";
+                elScanOverlay.style.display = "block";
+            }
 
             const payload = { text, imageBase64, password: savedPassword };
 
@@ -1206,6 +1225,7 @@
                 elBtnText.textContent = "魅力を言語化する";
                 elBtnText.classList.remove("loading-dots");
                 elScanOverlay.style.display = "none";
+                document.getElementById("previewContainer").style.minHeight = "0";
                 elMainRing.classList.remove("scanning");
                 if (window.lucide) window.lucide.createIcons();
             }

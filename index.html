@@ -615,8 +615,14 @@
     <!-- パスワード画面 -->
     <div id="pwOverlay">
         <div class="pw-card">
-            <span class="pw-lock-icon">🔐</span>
-            <div class="pw-title">ご利用いただくには<br>パスワードが必要です</div>
+            <!-- 無料お試し案内（3回未満の時に表示） -->
+            <div id="trialInfo" style="display:none;margin-bottom:20px;padding:14px 16px;border-radius:14px;background:linear-gradient(90deg,rgba(208,169,0,0.15),rgba(195,144,0,0.1));border:1px solid rgba(208,169,0,0.4);text-align:center;">
+                <div style="font-size:20px;margin-bottom:6px;">🎁</div>
+                <div style="font-size:14px;font-weight:900;color:#D0A900;">今なら3回まで無料でお試しできます</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.55);margin-top:6px;">登録不要・すぐ使えます</div>
+            </div>
+            <span class="pw-lock-icon" id="pwLockIcon">🔐</span>
+            <div class="pw-title" id="pwTitle">ご利用いただくには<br>パスワードが必要です</div>
             <div class="pw-desc" id="pwDesc">価値みっけは月額2,980円のサービスです。<br>ご購入後にパスワードをお届けします。</div>
 
             <a href="https://buy.stripe.com/3cIfZggXg2IRdhdcVecV203" target="_blank" class="pw-stripe-btn">
@@ -941,14 +947,38 @@
         const now = new Date();
         const isFree = now < FREE_UNTIL;
 
-        // 期限切れ後はパスワード画面の説明文を変更
-        if (!isFree) {
+        // パスワード画面の内容を状態に応じて切り替え
+        const currentUseCount = parseInt(localStorage.getItem("kachi_use_count") || "0");
+        const trialInfo = document.getElementById("trialInfo");
+        const pwTitle = document.getElementById("pwTitle");
+        const pwLockIcon = document.getElementById("pwLockIcon");
+
+        if (!savedPassword && isFree && currentUseCount < 3) {
+            // まだ無料回数が残っている → 無料案内を表示
+            if (trialInfo) trialInfo.style.display = "block";
+            if (pwLockIcon) pwLockIcon.style.display = "none";
+            if (pwTitle) pwTitle.innerHTML = "まずは無料で<br>お試しください";
+            const pwDesc = document.getElementById("pwDesc");
+            if (pwDesc) pwDesc.innerHTML = `🎁 残り<strong style="color:#D0A900;">${3 - currentUseCount}回</strong>無料で使えます（登録不要）`;
+        } else if (!isFree) {
+            // 無料期間終了
             const pwDesc = document.getElementById("pwDesc");
             if (pwDesc) pwDesc.textContent = "無料体験期間が終了しました。続けてご利用いただくには購入が必要です。";
+        } else {
+            // 3回使い切った
+            if (pwTitle) pwTitle.innerHTML = "無料体験が終了しました。<br>続けてご利用ください";
+            const pwDesc = document.getElementById("pwDesc");
+            if (pwDesc) pwDesc.innerHTML = "3回の無料体験をお使いいただきました。<br>月額2,980円でご購入いただけます。";
         }
 
-        if (isFree || savedPassword) {
+        // 無料体験中（3回未満）またはパスワードあり → 隠す
+        if (savedPassword) {
             pwOverlay.classList.add("hidden");
+        } else if (isFree) {
+            const currentCount = parseInt(localStorage.getItem("kachi_use_count") || "0");
+            if (currentCount < 3) {
+                pwOverlay.classList.add("hidden");
+            }
         }
 
         // ===================================
@@ -995,6 +1025,22 @@
                 return data.error !== "INVALID_PASSWORD";
             } catch(e) {
                 return false;
+            }
+        }
+
+        // 無料体験中はパスワード不要で直接アプリを開く
+        if (!savedPassword && isFree && currentUseCount < 3) {
+            const directBtn = document.createElement("button");
+            directBtn.className = "pw-stripe-btn";
+            directBtn.style.cssText = "display:block;width:100%;margin-top:16px;padding:16px;border-radius:14px;background:linear-gradient(90deg,#D0A900,#C39000);color:#000;font-weight:900;font-size:15px;border:none;cursor:pointer;";
+            directBtn.textContent = "🎁 無料で使い始める";
+            directBtn.addEventListener("click", () => {
+                pwOverlay.classList.add("hidden");
+            });
+            const pwCard = document.querySelector(".pw-card");
+            const stripeBtn = document.querySelector(".pw-stripe-btn");
+            if (stripeBtn && pwCard) {
+                pwCard.insertBefore(directBtn, stripeBtn);
             }
         }
 

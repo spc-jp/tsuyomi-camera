@@ -711,6 +711,14 @@
             <h1 id="siteTitle" class="text-center text-3xl sm:text-4xl font-black tracking-[.08em] cursor-pointer hover:opacity-70 transition-opacity" title="最初からやり直す">価値みっけ</h1>
             <div class="text-center text-[11px] tracking-[.35em] text-slate-500 mt-2">VISUAL VALUE FINDER</div>
 
+            <!-- 無料お試し案内（固定表示） -->
+            <div id="freeTrialNote" style="margin-top:12px;text-align:center;padding:10px 16px;border-radius:12px;background:linear-gradient(90deg,rgba(208,169,0,0.12),rgba(195,144,0,0.08));border:1px solid rgba(208,169,0,0.25);font-size:12px;color:rgb(var(--color-text));font-weight:700;">
+                🎁 今なら<strong>3回まで無料</strong>でお試しいただけます（登録不要）
+            </div>
+
+            <!-- 残り回数バナー（JS制御） -->
+            <div id="trialBanner" style="display:none;margin-top:8px;text-align:center;padding:8px 16px;font-size:12px;font-weight:700;background:linear-gradient(90deg,#D0A900,#C39000);color:#fff;border-radius:10px;"></div>
+
 
             <div class="mt-6 flex items-center justify-center">
                 <div class="scanRing" id="mainRing">
@@ -1001,16 +1009,33 @@
 
         // 残回数バナー表示
         const trialBannerEl = document.getElementById("trialBanner");
-        if (trialBannerEl && !savedPassword) {
+        const freeTrialNote = document.getElementById("freeTrialNote");
+        if (!savedPassword) {
             const remain = USE_LIMIT - getUseCount();
-            if (remain > 0) {
-                trialBannerEl.style.display = "block";
-                trialBannerEl.innerHTML = `🎁 無料体験 残り<strong>${remain}回</strong>（全${USE_LIMIT}回）`;
+            if (getUseCount() === 0) {
+                // 未使用 → 固定案内だけ表示
+                if (freeTrialNote) freeTrialNote.style.display = "block";
+                if (trialBannerEl) trialBannerEl.style.display = "none";
+            } else if (remain > 0) {
+                // 使用中 → 残り回数バナーに切り替え
+                if (freeTrialNote) freeTrialNote.style.display = "none";
+                if (trialBannerEl) {
+                    trialBannerEl.style.display = "block";
+                    trialBannerEl.innerHTML = `🎁 無料体験 残り<strong>${remain}回</strong>（全${USE_LIMIT}回）`;
+                }
             } else {
-                trialBannerEl.style.display = "block";
-                trialBannerEl.style.background = "linear-gradient(90deg,#ef4444,#dc2626)";
-                trialBannerEl.innerHTML = `⚠️ 無料体験が終了しました &nbsp;<a href="${STRIPE_URL}" target="_blank" style="color:#fff;text-decoration:underline;">ご購入はこちら →</a>`;
+                // 使い切り → 赤バナー
+                if (freeTrialNote) freeTrialNote.style.display = "none";
+                if (trialBannerEl) {
+                    trialBannerEl.style.display = "block";
+                    trialBannerEl.style.background = "linear-gradient(90deg,#ef4444,#dc2626)";
+                    trialBannerEl.innerHTML = `⚠️ 無料体験が終了しました &nbsp;<a href="${STRIPE_URL}" target="_blank" style="color:#fff;text-decoration:underline;">ご購入はこちら →</a>`;
+                }
             }
+        } else {
+            // パスワードあり → 両方非表示
+            if (freeTrialNote) freeTrialNote.style.display = "none";
+            if (trialBannerEl) trialBannerEl.style.display = "none";
         }
 
         async function checkPassword(pw) {
